@@ -1,11 +1,12 @@
 {
   "name": "someone-is-a-person",
   "version": "0.0.0",
-  "description": "Reach out and touch someone",
+  "description": "Identify people by a phone number and text with them until everyone-is-free",
   "dependencies": {
     "tell-the-universe": "*",
     "web-site": "*",
-    "browser-bridge": "*"
+    "browser-bridge": "*",
+    "is-everyone-free": "*"
   },
   "repository": {
     "type": "git",

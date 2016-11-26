@@ -1,7 +1,7 @@
 tellTheUniverse(
   "a-story",
   "someone-is-a-person"
-  ["sms-person", "web-site"],
+  ["sms-person", "web-site", "is-everyone-free"],
   function(Person) {
 
     function someoneIsAPerson(number) {
@@ -36,7 +36,12 @@ tellTheUniverse(
         )
       })
 
-      site.start(process.env.PORT)
+      if (isEveryoneFree() == "no") {
+        site.start(process.env.PORT)
+      } else {
+        throw new Error("We need a new goal")
+      }
+
     }
 
     return someoneIsAPerson
