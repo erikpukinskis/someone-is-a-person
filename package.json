@@ -1,0 +1,14 @@
+{
+  "name": "someone-is-a-person",
+  "version": "0.0.0",
+  "description": "Reach out and touch someone",
+  "dependencies": {
+    "tell-the-universe": "*",
+    "web-site": "*",
+    "browser-bridge": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erikpukinskis/someone-is-a-person.git"
+  }
+}
