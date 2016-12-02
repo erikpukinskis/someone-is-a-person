@@ -3,10 +3,17 @@
   "version": "0.1.0",
   "description": "Identify people by a phone number and text with them until everyone-is-free",
   "dependencies": {
+    "module-library": "*",
     "tell-the-universe": "*",
     "web-site": "*",
     "browser-bridge": "*",
-    "is-everyone-free": "*"
+    "is-everyone-free": "*",
+    "plivo": "*",
+    "web-element": "*",
+    "basic-styles": "*"
+  },
+  "scripts": {
+    "start": "env $(cat CREDENTIALS | xargs) node start"
   },
   "repository": {
     "type": "git",
