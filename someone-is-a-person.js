@@ -1,7 +1,7 @@
 tellTheUniverse(
   "a-story",
   "someone-is-a-person"
-  ["sms-person", "web-site", "is-everyone-free"],
+  ["phone-number", "web-site", "is-everyone-free"],
   function(Person) {
 
     function someoneIsAPerson(number) {

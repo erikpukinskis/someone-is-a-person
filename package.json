@@ -13,7 +13,8 @@
     "basic-styles": "*"
   },
   "scripts": {
-    "start": "env $(cat CREDENTIALS | xargs) node start"
+    "start": "env $(cat CREDENTIALS | xargs) node start",
+    "debug": "env $(cat CREDENTIALS | xargs) node debug start"
   },
   "repository": {
     "type": "git",
