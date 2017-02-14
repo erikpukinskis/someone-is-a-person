@@ -1,19 +1,39 @@
 var library = require("module-library")(require)
 
+
+// tick 3: tilt right
+// tick 4: rotate forward right foot forward (allowed since it is off ground)
+// moves center of gravity forward
+// tick 5: tilt forward
+// (momentum forward, right)
+// tick 6: when right center of gravity is as far forward as foot, touch to ground, to the right of center of gravity
+// tick 7: we are leaning slightly forward
+// tick 8: down force on right foot = cancels right rotation, accelerates forward
+// lift left foot (back to tick 2, but flipped)
+
+// controls: lift right, touch right, force right, lift left, touch left, force left
+
+
+
+
+
+
+
 library.using(
-  ["web-site", "web-element", "browser-bridge"],
-  function(site, element, BrowserBridge) {
+  ["web-site", "web-element", "browser-bridge", "basic-styles"],
+  function(site, element, BrowserBridge, basicStyles) {
     site.start(4000)
 
     var bridge = new BrowserBridge()
+    basicStyles.addTo(bridge)
 
     var torso = element.style(".torso", {
       "width": "2em",
       "height": "2em",
       "background": "red",
-      "animation": "wobble 500ms infinite alternate",
-      "animation-timing-function": "cubic-bezier(0.42,0.2,0.58,1)",
-      "transform-origin": "center bottom",
+      // "animation": "wobble 500ms infinite alternate",
+      // "animation-timing-function": "cubic-bezier(0.42,0.2,0.58,1)",
+      // "transform-origin": "center bottom",
     })
 
     var wobble = 
@@ -46,11 +66,68 @@ library.using(
       "}"
 
 
-    var body = [
-      element(".track", element(".feet", element(".torso"))),
+// tick 1: two feet on ground
+// pivot is between two feet, on ground
+// center of gravity on ground
+// tick 2: lift right foot
+// pivot shifts to left foot
+// center of gravity lifts up to height of left foot
+
+    var tick = bridge.defineFunction(function(t) {
+      var rightLeg = document.querySelector(".right-leg")
+  
+      switch(t) {
+        case 1:
+        break;
+        case 2:
+          rightLeg.style.height = "1em"
+          break;
+        case 3:
+        break;
+        case 4:
+        break;
+      }
+    })
+
+    var ticks = element([
+      element(".button", "1", {onclick: tick.withArgs(1).evalable()}),
+      element(".button", "2", {onclick: tick.withArgs(2).evalable()}),
+      element(".button", "3", {onclick: tick.withArgs(3).evalable()}),
+      element(".button", "4", {onclick: tick.withArgs(4).evalable()}),
+    ])
+
+
+    var body = element(
+      element.style({width: "2em", height: "4em", "white-space": "nowrap", position: "relative"}),
+      [
+        element(".torso"),
+        element(".leg.right-leg", element.style({
+          position: "absolute",
+          right: "0",
+          width: "0.5em",
+          height: "2em",
+          background: "blue"
+        })),
+        element(".leg.left-leg", element.style({
+          position: "absolute",
+          left: "0",
+          width: "0.5em",
+          height: "2em",
+          background: "blue",
+          display: "inline-block",
+        })),
+      ]
+    )
+
+
+
+
+    var page = [
+      ticks,
+      body,
       element.stylesheet(torso, wobble, hop, feet, track, glide),
     ]
 
-    site.addRoute("get", "/", bridge.requestHandler(body))
+    site.addRoute("get", "/", bridge.requestHandler(page))
   }
 )

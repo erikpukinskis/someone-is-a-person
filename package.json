@@ -10,7 +10,8 @@
     "is-everyone-free": "*",
     "plivo": "*",
     "web-element": "*",
-    "basic-styles": "*"
+    "basic-styles": "*",
+    "web-host": "*"
   },
   "scripts": {
     "start": "env $(cat CREDENTIALS | xargs) node start",
