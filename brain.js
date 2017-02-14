@@ -49,10 +49,11 @@ library.using(
 
     var powerStyle = element.style(".cell.power", {
       "background": "black",
+      "transition": "height "+(frame*2)+"ms"
     })
 
     var gravityStyle = element.style(".gravity", {
-      "transition": frame*2+"ms",
+      "transition": "transform "+(frame*2)+"ms",
       "transition-timing-function": " cubic-bezier(0.310, 0.440, 0.445, 1.650)", // http://stackoverflow.com/a/15427614/778946
     })
 
@@ -130,7 +131,7 @@ library.using(
             var mover = document.querySelector(".mover")
             var right = cell(1,2)
             var left = cell(1,0)
-            y += 0.2
+            y += 0.25
 
             mover.style.transform = "translateY("+y+"em)"
 
@@ -138,13 +139,14 @@ library.using(
             t++
             clock.innerHTML = t.toString()
 
-            if (t==5) {
-              t = 1
+            if ((t-1) % 8 == 1) {
               var background = document.querySelector(".background")
               background.style.transform = "translateY("+y+"em)"
             } 
 
-            switch(t) {
+            var mod = (t-1)%4+1
+
+            switch(mod) {
 
             case 1:
               right.classList.remove("stance")
