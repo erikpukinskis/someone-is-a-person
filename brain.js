@@ -10,7 +10,7 @@ library.using(
     })
 
     var cell = element.template(
-      ".cell",
+      ".cell.gravity",
       element.style({
         "display": "block",
         "position": "absolute",
@@ -49,14 +49,15 @@ library.using(
 
     var powerStyle = element.style(".cell.power", {
       "background": "black",
+    })
+
+    var gravityStyle = element.style(".gravity", {
       "transition": frame*2+"ms",
       "transition-timing-function": " cubic-bezier(0.310, 0.440, 0.445, 1.650)", // http://stackoverflow.com/a/15427614/778946
     })
 
     var bodyStyle = element.style(".bod", {
       "transform-origin": "2em 4em",
-      "transition": frame*2+"ms",
-      "transition-timing-function": " cubic-bezier(0.310, 0.440, 0.445, 1.650)",
     })
 
 
@@ -77,12 +78,12 @@ library.using(
         "left": "5em",
         "top": "5em",
       }),
-      element.stylesheet(rowStyle, cell, stance, raised, powerStyle, bodyStyle)
+      element.stylesheet(rowStyle, cell, gravityStyle, stance, raised, powerStyle, bodyStyle)
     )
 
 
     var background = element(".background")
-    var body = element(".bod")
+    var body = element(".bod.gravity")
 
     for(var height=0; height<brain.length; height++) {
 
@@ -101,7 +102,7 @@ library.using(
       }
     }
 
-    page.addChildren(background, body)
+    page.addChildren(background, element(".mover.gravity", body))
 
 
 
@@ -121,17 +122,30 @@ library.using(
             return document.querySelector(".height-"+height+".slide-"+slide)
           }
 
+          var y = 0
+
 
           function tick() {
             var bod = document.querySelector(".bod")
+            var mover = document.querySelector(".mover")
             var right = cell(1,2)
             var left = cell(1,0)
+            y += 0.2
+
+            mover.style.transform = "translateY("+y+"em)"
+
 
             t++
             clock.innerHTML = t.toString()
 
-            if (t==5) { t = 1 }
+            if (t==5) {
+              t = 1
+              var background = document.querySelector(".background")
+              background.style.transform = "translateY("+y+"em)"
+            } 
+
             switch(t) {
+
             case 1:
               right.classList.remove("stance")
               right.classList.add("raised")
