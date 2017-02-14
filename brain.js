@@ -4,6 +4,8 @@ library.using(
   ["web-host", "web-element"],
   function(host, element) {
 
+    var frame = 900
+
     var rowStyle = element.style(".row", {
     })
 
@@ -47,13 +49,13 @@ library.using(
 
     var powerStyle = element.style(".cell.power", {
       "background": "black",
-      "transition": "2s",
-      "transition-timing-function": " cubic-bezier(0.310, 0.440, 0.445, 1.650)",
+      "transition": frame*2+"ms",
+      "transition-timing-function": " cubic-bezier(0.310, 0.440, 0.445, 1.650)", // http://stackoverflow.com/a/15427614/778946
     })
 
     var bodyStyle = element.style(".bod", {
       "transform-origin": "2em 4em",
-      "transition": "2s",
+      "transition": frame*2+"ms",
       "transition-timing-function": " cubic-bezier(0.310, 0.440, 0.445, 1.650)",
     })
 
@@ -89,6 +91,9 @@ library.using(
         var neuron = cell(height, slide, thought)
 
         if (thought == "stance") {
+          // if (height == 1) {
+          //   neuron.appendStyles({visibility: "hidden"})
+          // }
           body.addChild(neuron)
         } else {
           background.addChild(neuron)
@@ -106,10 +111,10 @@ library.using(
       var bridge = getBridge()
 
       bridge.asap(
-        [brain],
-        function(brain) {
+        [brain, frame],
+        function(brain, frame) {
           var t = 0
-          setInterval(tick, 1000)
+          setInterval(tick, frame)
           var clock = document.querySelector(".clock")
 
           function cell(height, slide) {
@@ -128,31 +133,31 @@ library.using(
             if (t==5) { t = 1 }
             switch(t) {
             case 1:
-              left.classList.remove("power")
-              left.classList.add("stance")
               right.classList.remove("stance")
               right.classList.add("raised")
-              bod.style.transform = "rotate(20deg)"
+              bod.style.transform = "rotate(20deg) translateY(0em)"
               bod.style["transform-origin"] = "2em 4em"
             break;
             case 2:
+              left.classList.remove("power")
+              left.classList.add("stance")
               right.classList.remove("raised")
               right.classList.add("power")
               right.style.transform = "scaleY(1.0)"
-              bod.style.transform = "rotate(0deg)"
+              bod.style.transform = "rotate(0deg) translateY(-0.3em)"
             break;
             case 3:
               left.classList.remove("stance")
               left.classList.add("raised")
               bod.style["transform-origin"] = "4em 4em"
-              bod.style.transform = "rotate(-20deg)"
+              bod.style.transform = "rotate(-20deg) translateY(0em)"
             break;
             case 4:
               left.classList.remove("raised")
               left.classList.add("power")
               right.classList.remove("power")
               right.classList.add("stance")
-              bod.style.transform = "rotate(0deg)"
+              bod.style.transform = "rotate(0deg)  translateY(-0.3em)"
             break;
             }
           }
