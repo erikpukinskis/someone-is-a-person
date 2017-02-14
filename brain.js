@@ -21,6 +21,7 @@ library.using(
         this.appendStyles({
           "left": slide*2+"em",
           "top": height*2+"em",
+          "transform-origin": slide*2+"em "+height*2+"em",
         })
 
         this.addSelector(".height-"+height+".slide-"+slide)
@@ -37,13 +38,22 @@ library.using(
     })
 
     var raised = element.style(".cell.raised", {
+      "background": "transparent",
+      "box-sizing": "border-box",
+      "border": "2px solid cyan",
       "height": "1em",
       "vertical-align": "top",
     })
 
+    var powerStyle = element.style(".cell.power", {
+      "background": "black",
+      "transition": "2s",
+      "transition-timing-function": " cubic-bezier(0.310, 0.440, 0.445, 1.650)",
+    })
+
     var bodyStyle = element.style(".bod", {
       "transform-origin": "0em 4em",
-      "transition": "1s",
+      "transition": "2s",
       "transition-timing-function": " cubic-bezier(0.310, 0.440, 0.445, 1.650)",
     })
 
@@ -65,7 +75,7 @@ library.using(
         "left": "5em",
         "top": "5em",
       }),
-      element.stylesheet(rowStyle, cell, stance, raised, bodyStyle)
+      element.stylesheet(rowStyle, cell, stance, raised, powerStyle, bodyStyle)
     )
 
 
@@ -99,28 +109,39 @@ library.using(
         [brain],
         function(brain) {
           var t = 0
-          setInterval(tick, 2000)
+          setInterval(tick, 1000)
+          var clock = document.querySelector(".clock")
+          var foot = cell(1,2)
+          var bod = document.querySelector(".bod")
 
           function cell(height, slide) {
             return document.querySelector(".height-"+height+".slide-"+slide)
           }
 
+
           function tick() {
-            console.log("t="+t)
             t++
+            clock.innerHTML = t.toString()
             switch(t) {
-              case 1:
-                var foot = cell(1,2)
-                foot.classList.add("raised")
-                var bod = document.querySelector(".bod")
-                bod.style.transform = "rotate(20deg)"
-                break;
+            case 1:
+              foot.classList.remove("stance")
+              foot.classList.add("raised")
+              bod.style.transform = "rotate(20deg)"
+            break;
+            case 2:
+              foot.classList.remove("raised")
+              foot.classList.add("power")
+              foot.style.transform = "scaleY(1.0)"
+              bod.style.transform = "rotate(0deg)"
+            break;
+            default:
+            break;
             }
           }
         }
       )
 
-      bridge.send(page)
+      bridge.send([element(".clock", "0", element.style({"font-family": "sans-serif"})), page])
 
     })
 
