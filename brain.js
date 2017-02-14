@@ -52,7 +52,7 @@ library.using(
     })
 
     var bodyStyle = element.style(".bod", {
-      "transform-origin": "0em 4em",
+      "transform-origin": "2em 4em",
       "transition": "2s",
       "transition-timing-function": " cubic-bezier(0.310, 0.440, 0.445, 1.650)",
     })
@@ -111,8 +111,6 @@ library.using(
           var t = 0
           setInterval(tick, 1000)
           var clock = document.querySelector(".clock")
-          var foot = cell(1,2)
-          var bod = document.querySelector(".bod")
 
           function cell(height, slide) {
             return document.querySelector(".height-"+height+".slide-"+slide)
@@ -120,21 +118,41 @@ library.using(
 
 
           function tick() {
+            var bod = document.querySelector(".bod")
+            var right = cell(1,2)
+            var left = cell(1,0)
+
             t++
             clock.innerHTML = t.toString()
+
+            if (t==5) { t = 1 }
             switch(t) {
             case 1:
-              foot.classList.remove("stance")
-              foot.classList.add("raised")
+              left.classList.remove("power")
+              left.classList.add("stance")
+              right.classList.remove("stance")
+              right.classList.add("raised")
               bod.style.transform = "rotate(20deg)"
+              bod.style["transform-origin"] = "2em 4em"
             break;
             case 2:
-              foot.classList.remove("raised")
-              foot.classList.add("power")
-              foot.style.transform = "scaleY(1.0)"
+              right.classList.remove("raised")
+              right.classList.add("power")
+              right.style.transform = "scaleY(1.0)"
               bod.style.transform = "rotate(0deg)"
             break;
-            default:
+            case 3:
+              left.classList.remove("stance")
+              left.classList.add("raised")
+              bod.style["transform-origin"] = "4em 4em"
+              bod.style.transform = "rotate(-20deg)"
+            break;
+            case 4:
+              left.classList.remove("raised")
+              left.classList.add("power")
+              right.classList.remove("power")
+              right.classList.add("stance")
+              bod.style.transform = "rotate(0deg)"
             break;
             }
           }
