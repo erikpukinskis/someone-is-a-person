@@ -1,188 +1,129 @@
-var library = require("module-library")(require)
 
-library.using(
-  ["web-host", "web-element"],
-  function(host, element) {
-
-    var frame = 900
-
-    var rowStyle = element.style(".row", {
-    })
-
-    var cell = element.template(
-      ".cell.gravity",
-      element.style({
-        "display": "block",
-        "position": "absolute",
-        "width": "2em",
-        "height": "2em",
-        "background": "#eee",
-      }),
-      function(height, slide, thought) {
-
-        this.appendStyles({
-          "left": slide*2+"em",
-          "top": height*2+"em",
-          "transform-origin": slide*2+"em "+height*2+"em",
-        })
-
-        this.addSelector(".height-"+height+".slide-"+slide)
-
-        if (thought == "stance") {
-          this.addSelector(".stance")
-        }
-      }
-    )
+var frame = 900
 
 
-    var stance = element.style(".stance", {
-      "background": "cyan",
-    })
+// Boot
 
-    var raised = element.style(".cell.raised", {
-      "background": "transparent",
-      "box-sizing": "border-box",
-      "border": "2px solid cyan",
-      "height": "1em",
-      "vertical-align": "top",
-    })
+var t = 0
+setInterval(tick, frame)
+var clock = document.querySelector(".clock")
 
-    var powerStyle = element.style(".cell.power", {
-      "background": "black",
-      "transition": "height "+(frame*2)+"ms"
-    })
+function cellNode(height, slide) {
+  return document.querySelector(".height-"+height+".slide-"+slide)
+}
 
-    var gravityStyle = element.style(".gravity", {
-      "transition": "transform "+(frame*2)+"ms",
-      "transition-timing-function": " cubic-bezier(0.310, 0.440, 0.445, 1.650)", // http://stackoverflow.com/a/15427614/778946
-    })
-
-    var bodyStyle = element.style(".bod", {
-      "transform-origin": "2em 4em",
-    })
+var y = 0
 
 
+var key = {
+  up: 38,
+  down: 40,
+  right: 39,
+  left: 37,
+}
 
-    // Brain
-
-    var brain = [
-      [null,"stance",null,null],
-      ["stance",null,"stance",null],
-    ]
-
-    var highs = brain[0]
-    var lows = brain[1]
-
-    var page = element(".page",
-      element.style({
-        "position": "absolute",
-        "left": "5em",
-        "top": "5em",
-      }),
-      element.stylesheet(rowStyle, cell, gravityStyle, stance, raised, powerStyle, bodyStyle)
-    )
-
-
-    var background = element(".background")
-    var body = element(".bod.gravity")
-
-    for(var height=0; height<brain.length; height++) {
-
-      for(var slide=0; slide<brain[0].length; slide++) {
-        var thought = brain[height][slide]
-        var neuron = cell(height, slide, thought)
-
-        if (thought == "stance") {
-          // if (height == 1) {
-          //   neuron.appendStyles({visibility: "hidden"})
-          // }
-          body.addChild(neuron)
-        } else {
-          background.addChild(neuron)
-        }
-      }
-    }
-
-    page.addChildren(background, element(".mover.gravity", body))
-
-
-
-
-    host.onRequest(function(getBridge) {
-
-      var bridge = getBridge()
-
-      bridge.asap(
-        [brain, frame],
-        function(brain, frame) {
-          var t = 0
-          setInterval(tick, frame)
-          var clock = document.querySelector(".clock")
-
-          function cell(height, slide) {
-            return document.querySelector(".height-"+height+".slide-"+slide)
-          }
-
-          var y = 0
-
-
-          function tick() {
-            var bod = document.querySelector(".bod")
-            var mover = document.querySelector(".mover")
-            var right = cell(1,2)
-            var left = cell(1,0)
-            y += 0.25
-
-            mover.style.transform = "translateY("+y+"em)"
-
-
-            t++
-            clock.innerHTML = t.toString()
-
-            if ((t-1) % 8 == 1) {
-              var background = document.querySelector(".background")
-              background.style.transform = "translateY("+y+"em)"
-            } 
-
-            var mod = (t-1)%4+1
-
-            switch(mod) {
-
-            case 1:
-              right.classList.remove("stance")
-              right.classList.add("raised")
-              bod.style.transform = "rotate(20deg) translateY(0em)"
-              bod.style["transform-origin"] = "2em 4em"
-            break;
-            case 2:
-              left.classList.remove("power")
-              left.classList.add("stance")
-              right.classList.remove("raised")
-              right.classList.add("power")
-              right.style.transform = "scaleY(1.0)"
-              bod.style.transform = "rotate(0deg) translateY(-0.3em)"
-            break;
-            case 3:
-              left.classList.remove("stance")
-              left.classList.add("raised")
-              bod.style["transform-origin"] = "4em 4em"
-              bod.style.transform = "rotate(-20deg) translateY(0em)"
-            break;
-            case 4:
-              left.classList.remove("raised")
-              left.classList.add("power")
-              right.classList.remove("power")
-              right.classList.add("stance")
-              bod.style.transform = "rotate(0deg)  translateY(-0.3em)"
-            break;
-            }
-          }
-        }
-      )
-
-      bridge.send([element(".clock", "0", element.style({"font-family": "sans-serif"})), page])
-
-    })
-
+document.querySelector("html").addEventListener('keydown', function(event){
+  if (event.which == key.left) {
+    console.log("left!")
   }
-)
+}, false);
+
+
+
+var state = {
+  right: "stance",
+  left: "stance",
+}
+
+
+function tick() {
+  if (t>50) {
+    return
+  }
+  var bod = document.querySelector(".bod")
+  var mover = document.querySelector(".mover")
+  if (!mover) { console.log("no mover"); return }
+    
+  var right = cellNode(1,2)
+  var left = cellNode(1,0)
+  y += 0.25
+
+  mover.style.transform = "translateY("+y+"em)"
+
+  t++
+  clock.innerHTML = t.toString()
+
+  if ((t-1) % 8 == 1) {
+    var background = document.querySelector(".background")
+    background.style.transform = "translateY("+y+"em)"
+  } 
+
+  var legs = {
+    left: left,
+    right: right,
+  }
+    
+  function lift(which) {
+    legs[which].classList.remove(state[which])
+    legs[which].classList.add("raised")
+    console.log("adding raised to ", which)
+    state[which] = "raised"
+    if (which == "right") {
+      bod.style["transform-origin"] = "2em 4em"
+      bod.style.transform = "rotate(20deg) translateY(0em)"
+    } else {
+      bod.style["transform-origin"] = "4em 4em"
+      bod.style.transform = "rotate(-20deg) translateY(0em)"
+    }
+  }
+  
+  function power(which) {
+    if (state[which] != "raised") {
+      console.log("existing state on "+which+" is "+state[which])
+      console.log("existing classes are "+legs[which].classList)
+    }
+    
+    legs[which].classList.remove("raised")
+    legs[which].classList.add("power")
+    state[which] = "power"
+
+    var other = which == "right" ? "left" : "right"
+    legs[other].classList.remove("power")
+    legs[other].classList.add("stance")
+    state[other] = "stance"
+
+    legs[which].style.transform = "scaleY(1.0)"
+    bod.style.transform = "rotate(0deg) translateY(-0.3em)"
+  }
+  
+  var mod = (t-1)%4+1
+
+  switch(mod) {
+
+  // step 0: Solid box below each leg, tap right
+  // step 1: leg collapses
+  // step 2: tap and hold right to give it strength, tap left
+  // step 3: [has air]
+  // step 4: tap and hold left to give it strength, tap right
+  // step 4: [has air]
+  // ... step 2 again
+      
+  case 1:
+    lift("right")
+  break;
+  case 2:
+    power("right")
+  break;
+  case 3:
+    lift("left")
+  break;
+  case 4:
+    power("left")
+  break;
+  }
+  
+
+}
+
+
+
