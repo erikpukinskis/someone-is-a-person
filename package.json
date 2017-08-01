@@ -2,16 +2,21 @@
   "name": "someone-is-a-person",
   "version": "0.1.0",
   "description": "Identify people by a phone number and text with them until everyone-is-free",
+  "main": "someone-is-a-person.js",
   "dependencies": {
     "module-library": "*",
     "tell-the-universe": "*",
     "web-site": "*",
     "browser-bridge": "*",
     "is-everyone-free": "*",
-    "plivo": "*",
+    "phone-person": "*",
     "web-element": "*",
     "basic-styles": "*",
-    "web-host": "*"
+    "web-host": "*",
+    "paint-on-picture": "*",
+    "html-painting": "*",
+    "identifiable": "*",
+    "bridge-module": "*"
   },
   "scripts": {
     "start": "env $(cat CREDENTIALS | xargs) node start",
