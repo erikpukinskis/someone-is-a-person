@@ -2,8 +2,8 @@ var library = require("module-library")(require)
 
 module.exports = library.export(
   "someone-is-a-person",
-  [library.ref(), "phone-person", "./id-card", "identifiable", "html-painting", "character", "tell-the-universe", "web-element", "bridge-module"],
-  function(lib, phonePerson, idCard, identifiable, htmlPainting, character, aWildUniverseAppeared, element, bridgeModule) {
+  [library.ref(), "phone-person", "./id-card", "identifiable", "html-painting", "character", "tell-the-universe", "web-element", "bridge-module", "web-site"],
+  function(lib, phonePerson, idCard, identifiable, htmlPainting, character, aWildUniverseAppeared, element, bridgeModule, WebSite) {
 
     var redirects = {}
 
@@ -18,8 +18,7 @@ module.exports = library.export(
     }
     // characters.persistToS3(s3Options)
     // characters.load()
-    character("xwtr", "Purp")
-    characters.do("character", "xwtr", "Purp")
+    character("6z1j", "Priti")
 
 
     var someoneIsAPerson = element.template(
@@ -128,6 +127,11 @@ module.exports = library.export(
 
     someoneIsAPerson.prepareSite = function prepareSite(site) {
 
+        if (!site.addRoute) {
+          var app = site
+          site = new WebSite(app)
+        }
+
         idCard(site, function onIdentity(meId, myName, request, response) {
 
           var temporaryIdentity = request.cookies.temporaryIdentity
@@ -179,7 +183,10 @@ module.exports = library.export(
       }
 
     someoneIsAPerson.getIdFrom = function getIdFrom(request) {
-        return request.cookies.characterId
+        var meId = request.cookies.characterId
+        if (character.getName(meId, true)) {
+          return meId
+        }
       }
 
 

@@ -1,45 +1,26 @@
-var library = require("module-library")(require)
+var app = require("express")()
+var someoneIsAPerson = require(".")
+var BrowserBridge = require("browser-bridge")
 
-library.using(
-  [".", "web-host", "browser-bridge"],
-  function(someoneIsAPerson, host, BrowserBridge) {
+someoneIsAPerson.prepareSite(app)
 
-    // if (isEveryoneFree() != "no") {
-    //   throw new Error("We need a new goal")
-    // }
+app.get("/demo", function(request, response) {
 
-    var minutes = 60
-    var hours = 60*minutes
-    var days = 24*hours
-    var years = 365*days
+  var meId = someoneIsAPerson.getIdFrom(request)
 
-    host.onSite(function(site) {
+  if (!meId) {
+    someoneIsAPerson.getIdentityFrom(response, "/demo")
 
-      someoneIsAPerson.prepareSite(site)
+  } else {
+    var bridge = new BrowserBridge()
+    var avatar = someoneIsAPerson(bridge, meId)
 
-      site.addRoute("get", "/demo", function(request, response) {
-
-        var meId = someoneIsAPerson.getIdFrom(request)
-
-        // // uncomment to clear
-        // response.cookie(
-        //   "characterId",
-        //   "",{
-        //   maxAge: 10*years,
-        //   httpOnly: true})
-        // meId = false
-
-        if (!meId) {
-          someoneIsAPerson.getIdentityFrom(response, "/demo")
-          return
-        }
-
-        var bridge = new BrowserBridge()
-        var avatar = someoneIsAPerson(bridge, meId)
-        bridge.forResponse(response).send(avatar.html())
-      })
-
-    })
-
+    bridge
+    .forResponse(response)
+    .send(avatar.html())
   }
-)
+
+})
+
+app.listen(3004)
+console.log("http://localhost:3004/demo")

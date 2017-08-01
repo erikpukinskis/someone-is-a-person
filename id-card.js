@@ -2,8 +2,8 @@ var library = require("module-library")(require)
 
 module.exports = library.export(
   "id-card",
-  [library.ref(), "paint-on-picture", "web-host", "bridge-module", "web-element", "browser-bridge", "html-painting", "tell-the-universe"],
-  function(lib, paintOnPicture, host, bridgeModule, element, BrowserBridge, htmlPainting) {
+  [library.ref(), "paint-on-picture", "bridge-module", "web-element", "browser-bridge", "html-painting", "tell-the-universe"],
+  function(lib, paintOnPicture, bridgeModule, element, BrowserBridge, htmlPainting) {
 
     function idCard(site, onAvatar) {
       site.addRoute("post", "/avatars", function(request, response) {

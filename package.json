@@ -12,15 +12,13 @@
     "phone-person": "*",
     "web-element": "*",
     "basic-styles": "*",
-    "web-host": "*",
     "paint-on-picture": "*",
     "html-painting": "*",
     "identifiable": "*",
     "bridge-module": "*"
   },
-  "scripts": {
-    "start": "env $(cat CREDENTIALS | xargs) node start",
-    "debug": "env $(cat CREDENTIALS | xargs) node debug start"
+  "devDependencies": {
+    "express": "*"
   },
   "repository": {
     "type": "git",
