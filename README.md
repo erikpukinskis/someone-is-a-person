@@ -2,22 +2,19 @@ Identify yourself with a pixely avatar. Declare that **someone-is-a-person**.
 
 ```javascript
 
-var site = new require("web-site")
+var app = require("express")()
+var someoneIsAPerson = require("someone-is-a-person")
 
 someoneIsAPerson.prepareSite(site)
 
-site.addRoute(
-  "get",
-  "/demo",
-  function(request, response) {
+express.get("/", function(request, response) {
 
-    var meId = someoneIsAPerson.getIdFrom(request)
+  var meId = someoneIsAPerson.getIdFrom(request)
 
-    if (!meId) {
-      someoneIsAPerson.getIdentityFrom(response, "/demo")
-      return
-    }
+  if (meId) {
+    someoneIsAPerson.getIdentityFrom(response, "/demo")
 
+  } else {
     var bridge = new BrowserBridge()
     var avatar = someoneIsAPerson(bridge, meId)
 
@@ -25,7 +22,8 @@ site.addRoute(
     .forResponse(response)
     .send(avatar.html())
   }
-)
+
+})
 
 ```
 
