@@ -45,7 +45,7 @@ module.exports = library.export(
     function prepareBridge(bridge) {
       if (bridge.remember("someone-is-a-person")) { return }
 
-      bridge.see("someone-is-a-person")
+      bridge.see("someone-is-a-person", true)
 
       var avatarStyle = element.style(".avatar", {
 
@@ -189,6 +189,9 @@ module.exports = library.export(
         }
       }
 
+    someoneIsAPerson.remember = function(id, name) {
+     character(id, name)
+    }
 
     function registerPhone(request, response) {
 
