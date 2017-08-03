@@ -19,9 +19,9 @@ module.exports = library.export(
       return id
     }
 
-    character.getPicture = identifiable.getFrom(avatars, {description: "avatar"})
+    character.getPicture = identifiable.getFrom(avatars, "avatar")
 
-    character.getName = identifiable.getFrom(names, {description: "character name"})
+    character.getName = identifiable.getFrom(names, "character name")
 
     return character
   }
