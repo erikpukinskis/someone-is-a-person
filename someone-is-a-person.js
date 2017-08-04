@@ -189,9 +189,21 @@ module.exports = library.export(
         }
       }
 
-    someoneIsAPerson.remember = function(id, name) {
-     character(id, name)
-    }
+    someoneIsAPerson.ensureMe = function(request, response) {
+        var meId = someoneIsAPerson.getIdFrom(request)
+
+        if (!characterId) {
+          meId = character()
+
+          response.cookie(
+            "characterId",
+            meId,{
+            maxAge: 10*years,
+            httpOnly: true})
+        }
+
+        return meId
+      }
 
     function registerPhone(request, response) {
 
