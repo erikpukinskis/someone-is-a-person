@@ -15,7 +15,8 @@
     "paint-on-picture": "*",
     "html-painting": "*",
     "identifiable": "*",
-    "bridge-module": "*"
+    "bridge-module": "*",
+    "character": "*"
   },
   "devDependencies": {
     "express": "*"
