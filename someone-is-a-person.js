@@ -18,8 +18,7 @@ module.exports = library.export(
     }
     // characters.persistToS3(s3Options)
     // characters.load()
-    character("6z1j", "Priti")
-
+    character("01k5", "Kermit")
 
     var someoneIsAPerson = element.template(
       ".avatar",
@@ -101,18 +100,18 @@ module.exports = library.export(
           characterUniverse.persistToLocalStorage()
           characterUniverse.load()
 
-          var picture = character.getPicture(meId)
+          var avatar = character.remember(meId, "avatar")
 
-          var transform = "scale("+picture.scale+") translate("+picture.offsetLeft+"px, "+picture.offsetTop+"px)"
+          var transform = "scale("+avatar.scale+") translate("+avatar.offsetLeft+"px, "+avatar.offsetTop+"px)"
 
           document.querySelector(".swatches").style.transform = transform 
 
 
-          if (!picture.paintingId) {
+          if (!avatar.paintingId) {
             throw new Error("No painting id")
           }
 
-          htmlPainting.playBackInto(picture.paintingId, ".swatches")
+          htmlPainting.playBackInto(avatar.paintingId, ".swatches")
         }
       )
 

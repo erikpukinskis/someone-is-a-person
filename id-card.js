@@ -92,10 +92,13 @@ module.exports = library.export(
           scale: picture.scale
         }
 
-        var id = character(null, name, avatar)
+        var id = character(null, name)
+        characterUniverse.do("character", id, name)
+
+        character.see(id, "avatar", avatar)
+        characterUniverse.do("character.see", id, "avatar", avatar)
 
         document.querySelector(".character-id-input").value = id
-        characterUniverse.do("character", id, name, avatar)
       }
     )
 
