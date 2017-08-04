@@ -74,7 +74,7 @@ module.exports = library.export(
 
 
     var persistCharacter = bridge.defineFunction(
-      [paintingUniverse, picture, bridgeModule(lib, "tell-the-universe", bridge), bridgeModule(lib, "./character", bridge)],
+      [paintingUniverse, picture, bridgeModule(lib, "tell-the-universe", bridge), bridgeModule(lib, "character", bridge)],
       function persistCharacter(paintingUniverse, picture, aWildUniverseAppeared, character, event) {
 
         paintingUniverse.persistToLocalStorage()

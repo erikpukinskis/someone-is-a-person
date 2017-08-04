@@ -8,7 +8,7 @@ module.exports = library.export(
     var redirects = {}
 
     var characters = aWildUniverseAppeared("characters", {
-      character: "./character"
+      character: "character"
     })
 
     var s3Options = {
