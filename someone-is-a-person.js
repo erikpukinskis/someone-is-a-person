@@ -183,7 +183,7 @@ module.exports = library.export(
 
     someoneIsAPerson.getIdFrom = function getIdFrom(request) {
         var meId = request.cookies.characterId
-        if (character.getName(meId, true)) {
+        if (meId && character.getName(meId, true)) {
           return meId
         }
       }
@@ -191,7 +191,7 @@ module.exports = library.export(
     someoneIsAPerson.ensureMe = function(request, response) {
         var meId = someoneIsAPerson.getIdFrom(request)
 
-        if (!characterId) {
+        if (!meId) {
           meId = character()
 
           response.cookie(
