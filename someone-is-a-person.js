@@ -164,7 +164,7 @@ module.exports = library.export(
 
       }
 
-    someoneIsAPerson.getIdentityFrom = function getIdentityFrom(response, redirectTo) {
+    someoneIsAPerson.getIdentityFrom = function getIdentityFromUser(response, redirectTo) {
         var temporaryIdentity = identifiable.assignId(redirects)
 
         redirects[temporaryIdentity] = redirectTo
@@ -183,9 +183,12 @@ module.exports = library.export(
 
     someoneIsAPerson.getIdFrom = function getIdFrom(request) {
         var meId = request.cookies.characterId
+
         if (meId && character.getName(meId, true)) {
           return meId
         }
+
+        return request.cookies.transientCharacterId
       }
 
     someoneIsAPerson.ensureMe = function(request, response) {
@@ -195,7 +198,7 @@ module.exports = library.export(
           meId = character()
 
           response.cookie(
-            "characterId",
+            "transientCharacterId",
             meId,{
             maxAge: 10*years,
             httpOnly: true})
