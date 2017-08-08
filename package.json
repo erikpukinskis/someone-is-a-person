@@ -1,6 +1,6 @@
 {
   "name": "someone-is-a-person",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Identify people by a phone number and text with them until everyone-is-free",
   "main": "someone-is-a-person.js",
   "dependencies": {
