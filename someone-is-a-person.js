@@ -2,13 +2,13 @@ var library = require("module-library")(require)
 
 module.exports = library.export(
   "someone-is-a-person",
-  [library.ref(), "phone-person", "./id-card", "identifiable", "html-painting", "character", "tell-the-universe", "web-element", "bridge-module", "web-site"],
-  function(lib, phonePerson, idCard, identifiable, htmlPainting, character, aWildUniverseAppeared, element, bridgeModule, WebSite) {
+  [library.ref(), "phone-person", "./id-card", "identifiable", "html-painting", "creature", "tell-the-universe", "web-element", "bridge-module", "web-site"],
+  function(lib, phonePerson, idCard, identifiable, htmlPainting, creature, aWildUniverseAppeared, element, bridgeModule, WebSite) {
 
     var redirects = {}
 
-    var characters = aWildUniverseAppeared("characters", {
-      character: "character"
+    var creatures = aWildUniverseAppeared("creatures", {
+      creature: "creature"
     })
 
     var s3Options = {
@@ -16,9 +16,9 @@ module.exports = library.export(
       secret: process.env.AWS_SECRET_ACCESS_KEY,
       bucket: process.env.S3_BUCKET_NAME,
     }
-    // characters.persistToS3(s3Options)
-    // characters.load()
-    character("01k5", "Kermit")
+    // creatures.persistToS3(s3Options)
+    // creatures.load()
+    creature("01k5", "Kermit")
 
     var someoneIsAPerson = element.template(
       ".avatar",
@@ -26,7 +26,7 @@ module.exports = library.export(
 
         this.addChild(element(".swatches"))
 
-        var name = character.getName(meId)
+        var name = creature.getName(meId)
         if (!name) {
           throw new Error("No name for "+meId)
         }
@@ -35,7 +35,7 @@ module.exports = library.export(
           element(".name", name)
         )
 
-        var load = bridge.remember("someone-is-a-person/loadCharacterPainting")
+        var load = bridge.remember("someone-is-a-person/loadCreaturerPainting")
 
         bridge.domReady(load.withArgs(meId))
       }
@@ -82,25 +82,25 @@ module.exports = library.export(
         function(moveToSource) {
           var body = document.querySelector("body")
           if (body.getAttribute("onclick")) {
-            throw new Error("Already assigned onclick. Can't add someone-is-a-person character movement")
+            throw new Error("Already assigned onclick. Can't add someone-is-a-person creature movement")
           }
           body.setAttribute("onclick", moveToSource)
           body.style["min-height"] = window.innerHeight+"px"
       })
 
-      var loadCharacterPainting = bridge.defineFunction(
-        [bridgeModule(lib, "html-painting", bridge), bridgeModule(lib, "character", bridge), bridgeModule(lib, "tell-the-universe", bridge)],
-        function loadCharacterPainting(htmlPainting, character, aWildUniverseAppeared, meId) {
+      var loadCreaturePainting = bridge.defineFunction(
+        [bridgeModule(lib, "html-painting", bridge), bridgeModule(lib, "creature", bridge), bridgeModule(lib, "tell-the-universe", bridge)],
+        function loadCreaturePainting(htmlPainting, creature, aWildUniverseAppeared, meId) {
 
           var paintings = aWildUniverseAppeared("paintings", {htmlPainting: htmlPainting})
           paintings.persistToLocalStorage()
           paintings.load()
 
-          var characterUniverse = aWildUniverseAppeared("characters", {character: character})
-          characterUniverse.persistToLocalStorage()
-          characterUniverse.load()
+          var creatureUniverse = aWildUniverseAppeared("creatures", {creature: creature})
+          creatureUniverse.persistToLocalStorage()
+          creatureUniverse.load()
 
-          var avatar = character.remember(meId, "avatar")
+          var avatar = creature.remember(meId, "avatar")
 
           var transform = "scale("+avatar.scale+") translate("+avatar.offsetLeft+"px, "+avatar.offsetTop+"px)"
 
@@ -115,7 +115,7 @@ module.exports = library.export(
         }
       )
 
-      bridge.see("someone-is-a-person/loadCharacterPainting", loadCharacterPainting)
+      bridge.see("someone-is-a-person/loadCreaturePainting", loadCreaturePainting)
     }
 
 
@@ -143,11 +143,11 @@ module.exports = library.export(
             throw new Error("no response")
           }
 
-          character(meId, myName)
-          characters.do("character", meId, myName)
+          creature(meId, myName)
+          creatures.do("creature", meId, myName)
 
           response.cookie(
-            "characterId",
+            "creatureId",
             meId,{
             maxAge: 10*years,
             httpOnly: true})
@@ -182,23 +182,23 @@ module.exports = library.export(
       }
 
     someoneIsAPerson.getIdFrom = function getIdFrom(request) {
-        var meId = request.cookies.characterId
+        var meId = request.cookies.creatureId
 
-        if (meId && character.getName(meId, true)) {
+        if (meId && creature.getName(meId, true)) {
           return meId
         }
 
-        return request.cookies.transientCharacterId
+        return request.cookies.transientCreatureId
       }
 
     someoneIsAPerson.ensureMe = function(request, response) {
         var meId = someoneIsAPerson.getIdFrom(request)
 
         if (!meId) {
-          meId = character()
+          meId = creature()
 
           response.cookie(
-            "transientCharacterId",
+            "transientCreatureId",
             meId,{
             maxAge: 10*years,
             httpOnly: true})

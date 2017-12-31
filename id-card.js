@@ -8,7 +8,7 @@ module.exports = library.export(
     function idCard(site, onAvatar) {
       site.addRoute("post", "/avatars", function(request, response) {
         var name = request.body.name
-        var id = request.body.characterId
+        var id = request.body.creatureId
         onAvatar(id, name, request, response)
       })
 
@@ -74,14 +74,14 @@ module.exports = library.export(
 
 
     var persistCharacter = bridge.defineFunction(
-      [paintingUniverse, picture, bridgeModule(lib, "tell-the-universe", bridge), bridgeModule(lib, "character", bridge)],
-      function persistCharacter(paintingUniverse, picture, aWildUniverseAppeared, character, event) {
+      [paintingUniverse, picture, bridgeModule(lib, "tell-the-universe", bridge), bridgeModule(lib, "creature", bridge)],
+      function persistCharacter(paintingUniverse, picture, aWildUniverseAppeared, creature, event) {
 
         paintingUniverse.persistToLocalStorage()
         paintingUniverse.persistNow()
 
-        var characterUniverse = aWildUniverseAppeared("characters", {character: character})
-        characterUniverse.persistToLocalStorage()
+        var creatureUniverse = aWildUniverseAppeared("creatures", {creature: creature})
+        creatureUniverse.persistToLocalStorage()
 
         var name = document.querySelector(".name-input").value
 
@@ -92,13 +92,13 @@ module.exports = library.export(
           scale: picture.scale
         }
 
-        var id = character(null, name)
-        characterUniverse.do("character", id, name)
+        var id = creature(null, name)
+        creatureUniverse.do("creature", id, name)
 
-        character.see(id, "avatar", avatar)
-        characterUniverse.do("character.see", id, "avatar", avatar)
+        creature.see(id, "avatar", avatar)
+        creatureUniverse.do("creature.see", id, "avatar", avatar)
 
-        document.querySelector(".character-id-input").value = id
+        document.querySelector(".creature-id-input").value = id
       }
     )
 
@@ -109,7 +109,7 @@ module.exports = library.export(
       element(".label", "IDENTIFICATION"),
       element(".id-photo", element(".id-photo-swatches")),
       element("input.name-input", {type: "text", placeholder: "Your Name", name: "name"}),
-      element("input.character-id-input", {type: "hidden", name: "characterId"}),
+      element("input.creature-id-input", {type: "hidden", name: "creatureId"}),
       element("input", {type: "submit", value: "Issue card"}, element.style({"margin-top": "10px"})),
     ])
 

@@ -16,7 +16,7 @@
     "html-painting": "*",
     "identifiable": "*",
     "bridge-module": "*",
-    "character": "*"
+    "creature": "*"
   },
   "devDependencies": {
     "express": "*"
