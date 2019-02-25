@@ -4,10 +4,7 @@
 
 
 
-
-var frame = 900
-
-
+var FRAME_LENGTH_IN_MS = 200
 
 // Boot
 
@@ -137,5 +134,5 @@ setTimeout(function() {
     right: cellNode(1,2),
   }
   
-  setInterval(tick, frame)
+  setInterval(tick, FRAME_LENGTH_IN_MS)
 })

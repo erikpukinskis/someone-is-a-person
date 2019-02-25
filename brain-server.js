@@ -1,29 +1,27 @@
 var library = require("module-library")(require)
 
 library.using(
-  ["web-host", "web-element"],
-  function(host, element) {
+  ["web-site", "web-element"],
+  function(WebSite, element) {
 
-    var frame = 900
+    var site = new WebSite()
+    var FRAME_LENGTH_IN_MS = 200
 
-    host.onSite(function(site) {
+    site.addRoute(
+      "get",
+      "/",
+      function(x, response) {
+        response.send(page.html())
+      }
+    )
 
-      site.addRoute(
-        "get",
-        "/brain",
-        function(x, response) {
-          response.send(page.html())
-        }
-      )
+    site.addRoute(
+      "get",
+      "/brain.js",
+      site.sendFile(__dirname, "brain.js")
+    )
 
-      site.addRoute(
-        "get",
-        "/brain.js",
-        site.sendFile(__dirname, "brain.js")
-      )
-
-    })
-
+    site.start(5550)
 
     var rowStyle = element.style(".row", {
     })
@@ -68,12 +66,13 @@ library.using(
 
     var powerStyle = element.style(".cell.power", {
       "background": "black",
-      "transition": "height "+(frame*2)+"ms"
+      "transition": "height "+FRAME_LENGTH_IN_MS+"ms"
     })
 
+    var base
     var gravityStyle = element.style(".gravity", {
-      "transition": "transform "+(frame*2)+"ms",
-      "transition-timing-function": " cubic-bezier(0.310, 0.440, 0.445, 1.650)", // http://stackoverflow.com/a/15427614/778946
+      "transition": "transform "+FRAME_LENGTH_IN_MS+"ms",
+      "transition-timing-function": "ease-out", // http://stackoverflow.com/a/15427614/778946
     })
 
     var bodyStyle = element.style(".bod", {
