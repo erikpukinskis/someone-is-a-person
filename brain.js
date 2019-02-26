@@ -4,7 +4,7 @@
 
 
 
-var FRAME_LENGTH_IN_MS = 200
+var FRAME_LENGTH_IN_MS = 250
 
 // Boot
 

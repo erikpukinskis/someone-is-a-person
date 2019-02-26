@@ -5,7 +5,7 @@ library.using(
   function(WebSite, element) {
 
     var site = new WebSite()
-    var FRAME_LENGTH_IN_MS = 200
+    var FRAME_LENGTH_IN_MS = 250
 
     site.addRoute(
       "get",
@@ -72,7 +72,7 @@ library.using(
     var base
     var gravityStyle = element.style(".gravity", {
       "transition": "transform "+FRAME_LENGTH_IN_MS+"ms",
-      "transition-timing-function": "ease-out", // http://stackoverflow.com/a/15427614/778946
+      "transition-timing-function": "ease-in", // http://stackoverflow.com/a/15427614/778946
     })
 
     var bodyStyle = element.style(".bod", {
