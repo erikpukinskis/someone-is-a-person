@@ -33,7 +33,7 @@ library.using(
       }),
     )
 
-    brain.addTo(bridge)
+    brain.prepareBridge(bridge)
 
     var background = element(".background")
     var body = element(".bod.gravity")

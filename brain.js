@@ -3,14 +3,22 @@ var library = require("module-library")(require)
 
 module.exports = library.export(
   "someone-is-a-person/brain",[
-  "web-element"],
-  function(element) {
+  "web-element",
+  "./thought-to-leg"],
+  function(element, thoughtToLeg) {
 
-    var FRAME_LENGTH_IN_MS = 2000
+    var FRAME_LENGTH_IN_MS = 500
+
+
 
 
 
     function backlog() {}
+    backlog.done = function(){}
+
+
+    backlog.done(
+      "Draw 4 frames of walk")
 
     // I am smoking so much and it does very little
 
@@ -22,9 +30,52 @@ module.exports = library.export(
 
     // But in lieu of cannabis, I have decided to solve programming problems:
 
+    backlog("brain",[
+      "voxel moves forward twice as often",
+      "draw leftwards legs",
+      "code leftward legs as squares",
+
+      "squash leftward legs frontward",
+      "any rotation",
+
+      "walk cycle will stretch to other nearby squares if you click them",
+      // slider for how tight the knee gets
+      // slider for how loose the drop off frame is
+      ])
+
+
+    backlog("chickens",[
+      // Chicken wakes up
+
+      // Chicken can try random directions
+
+      // You see food ahead
+
+      // You click in a direction, the chicken just lunges
+
+      // You click near its feet, the chicken takes a step
+
+      // You click left right left right left
+
+      // The chicken gets a food
+
+      // The chicken has a positive memory: left right left right left
+
+      // The chicken will now loop between random, and that nice memory
+
+      // Now it is going in every direction but not staying near the food
+
+      // It feels frustration
+
+      // You make it turn around and go to the food
+
+      // Now it remembers frustration, left left left right left right left
+
+      // Old memories die
+    ])
+
 
     backlog("someone-is-a-person",[
-      "walk cycle will stretch to other nearby squares if you click them",
       "Paint your head",
       "Paint your body (choose one color)",
       "Pants can have multiple segments (max 3), but they are only posed once per frame",
@@ -51,6 +102,13 @@ module.exports = library.export(
         "background": "#eee",
       }),
       function(height, slide, thought) {
+
+
+        var leg = thoughtToLeg(thought)
+
+        if (leg) {
+          this.addChild(leg)
+          debugger}
 
         this.appendStyles({
           "left": slide*2+"em",
@@ -231,9 +289,11 @@ module.exports = library.export(
 
     brain.FRAME_LENGTH_IN_MS = FRAME_LENGTH_IN_MS
 
-    brain.addTo = function(bridge){
+    brain.prepareBridge = function(bridge){
       if (bridge.remember("someone-is-a-person/brain")) {
         return }
+
+      thoughtToLeg.prepareBridge(bridge)
 
       bridge.addToHead(
         element.stylesheet(rowStyle, cell, gravityStyle, stance, raised, powerStyle, bodyStyle))
@@ -242,6 +302,6 @@ module.exports = library.export(
     }
 
     brain.cell = cell
-    
+
     return brain
   })
