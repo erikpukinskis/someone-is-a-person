@@ -125,44 +125,39 @@ module.exports = library.export(
     )
 
 
-    var rowStyle = element.style(".row", {
-    })
 
+    var stylesheet = element.stylesheet([
+      cell,
 
+      element.style(".row", {
+        }),
 
+      element.style(".stance", {
+        "background": "cyan",
+      }),
 
-    var stance = element.style(".stance", {
-      "background": "cyan",
-    })
+      element.style(".cell.raised", {
+        "background": "transparent",
+        "box-sizing": "border-box",
+        "border": "2px solid cyan",
+        "height": "1em",
+        "vertical-align": "top",
+      }),
 
-    var raised = element.style(".cell.raised", {
-      "background": "transparent",
-      "box-sizing": "border-box",
-      "border": "2px solid cyan",
-      "height": "1em",
-      "vertical-align": "top",
-    })
+      element.style(".cell.power", {
+        "background": "black",
+        "transition": "height "+FRAME_LENGTH_IN_MS+"ms"
+      }),
 
-    var powerStyle = element.style(".cell.power", {
-      "background": "black",
-      "transition": "height "+FRAME_LENGTH_IN_MS+"ms"
-    })
+      element.style(".gravity", {
+        "transition": "transform "+FRAME_LENGTH_IN_MS+"ms",
+        "transition-timing-function": "ease-in", // http://stackoverflow.com/a/15427614/778946
+      }),
 
-    var gravityStyle = element.style(".gravity", {
-      "transition": "transform "+FRAME_LENGTH_IN_MS+"ms",
-      "transition-timing-function": "ease-in", // http://stackoverflow.com/a/15427614/778946
-    })
-
-    var bodyStyle = element.style(".bod", {
-      "transform-origin": "2em 4em",
-    })
-
-
-
-
-
-
-
+      element.style(".bod", {
+        "transform-origin": "2em 4em",
+      }),
+    ])
 
 
 
@@ -295,8 +290,7 @@ module.exports = library.export(
 
       thoughtToLeg.prepareBridge(bridge)
 
-      bridge.addToHead(
-        element.stylesheet(rowStyle, cell, gravityStyle, stance, raised, powerStyle, bodyStyle))
+      bridge.addToHead(stylesheet)
 
       bridge.see("someone-is-a-person/brain", true)
     }
