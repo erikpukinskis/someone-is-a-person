@@ -18,7 +18,7 @@ library.using(
     // Brain
 
     var brainCells = [
-      [null,"stance",null,null],
+      [null,"hips",null,null],
       ["stance",null,"stance",null],
     ]
 
@@ -44,7 +44,7 @@ library.using(
         var thought = brainCells[height][slide]
         var neuron = brain.cell(height, slide, thought)
 
-        if (thought == "stance") {
+        if (thought == "stance" || thought == "hips") {
           // if (height == 1) {
           //   neuron.appendStyles({visibility: "hidden"})
           // }

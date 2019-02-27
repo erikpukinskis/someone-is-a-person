@@ -120,6 +120,8 @@ module.exports = library.export(
 
         if (thought == "stance") {
           this.addSelector(".stance")
+        } else if (thought == "hips"){
+          this.addSelector(".hips")
         }
       }
     )
@@ -134,6 +136,10 @@ module.exports = library.export(
 
       element.style(".stance", {
         "background": "cyan",
+      }),
+
+      element.style(".hips", {
+        "background": "blue",
       }),
 
       element.style(".cell.raised", {
