@@ -1,7 +1,7 @@
 var library = require("module-library")(require)
 
 module.exports = library.export(
-  "legs",[
+  "thought-to-leg",[
   "web-element"],
   function(element) {
 
@@ -60,7 +60,7 @@ module.exports = library.export(
       }
     }
 
-    thoughtToLeg.prepareBridge = function(bridge) {
+    function prepareBridge(bridge) {
       bridge.addToHead(stylesheet)
     }
 
@@ -86,6 +86,7 @@ module.exports = library.export(
           }
           return element(
             ".dot",
+            ".dot-"+dot.name,
             element.style({
               "background": color,
               "width": dot.size+"px",
@@ -98,6 +99,70 @@ module.exports = library.export(
         ".leg",
         els)
     }
+
+    function animateLeg(legElementId) {
+      console.log("animating")
+      var node = document.getElementById(legElementId)
+
+      setInterval(nextLegPosition.bind(null, node), 250)
+    }
+
+    var position = "the claw"
+    var rotation = 0
+    var nextPositionAfter = {
+      "the claw": "the reach",
+      "the reach": "the stand",
+      "the stand": "the hop",
+      "the hop" : "the claw"}
+
+    function nextLegPosition(legNode) {
+      position = nextPositionAfter[position]
+      setLegPosition(legNode)}
+
+    function setLegPosition(legNode) {
+      var newLeg = legs[position]
+
+      var radians = rotation/180.0 * Math.PI
+      console.log("rotation", rotation)
+
+      newLeg.forEach(
+        function(dot) {
+
+          var legPart = legNode.querySelector(
+            ".dot-"+dot.name)
+
+          var midDotX = dot.left + dot.size/2
+
+          if (midDotX > 1) {
+            var negative = true
+            midDotX *= -1
+          } else {
+            var negative = false
+          }
+
+          var newMidDotX = midDotX
+          var newMidDotX = Math.cos(radians) * midDotX
+
+          if (negative) {
+            newMidDotX *= -1
+          }
+
+          var left = newMidDotX - dot.size/2
+
+          legPart.style.left = left+"px"
+          legPart.style.top = dot.top+"px" })
+    }
+
+    function rotateLeg(legElementId) {
+      rotation++
+      var node = document.getElementById(legElementId)
+      setLegPosition(node)}
+
+    thoughtToLeg.animateLeg = animateLeg
+
+    thoughtToLeg.rotateLeg = rotateLeg
+
+    thoughtToLeg.prepareBridge = prepareBridge
 
     return thoughtToLeg
   })

@@ -107,8 +107,7 @@ module.exports = library.export(
         var leg = thoughtToLeg(thought)
 
         if (leg) {
-          this.addChild(leg)
-          debugger}
+          this.addChild(leg)}
 
         this.appendStyles({
           "left": slide*2+"em",
@@ -188,12 +187,6 @@ module.exports = library.export(
       y = 0
 
       clock = document.querySelector(".clock")
-
-      document.querySelector("html").addEventListener('keydown', function(event){
-        if (event.key == "ArrowLeft") {
-          console.log("left!")
-        }
-      }, false);
 
       setTimeout(function() {
         bod = document.querySelector(".bod")
