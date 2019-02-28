@@ -38,15 +38,70 @@ library.using(
     var background = element(".background")
     var bod = element(".bod.gravity")
 
-    var demoLeg = thoughtToLeg("stance")
+    var frames = {
+      "the claw": [
+        dot("thigh-base", 10,-11,0),
+        dot("thigh-mid", 10,-22,0),
+        dot("thigh-end", 10,-33,0),
+        dot("knee", 7,-35, 13),
+        dot("calf", 7,-26, 13),
+        dot("ankle", 7,-17, 13),
+        dot("heel", 7,-14, 15),
+        dot("toe", 7,-14, 22),
+      ],
+
+      "the reach": [
+        dot("thigh-base", 10,-10,0),
+        dot("thigh-mid", 10,-17,7),
+        dot("thigh-end", 10,-24,14),
+        dot("knee", 7, -30,23),
+        dot("calf", 7, -36,29),
+        dot("ankle", 7, -42,35),
+        dot("heel", 7, -48,41),
+        dot("toe", 7, -55,36),
+      ],
+
+      "the stand": [
+        dot("thigh-base", 10,-10,0),
+        dot("thigh-mid", 10,-10,11),
+        dot("thigh-end", 10,-10,22),
+        dot("knee", 7, -6,31),
+        dot("calf", 7, -6,39),
+        dot("ankle", 7, -6,47),
+        dot("heel", 7, -7,50),
+        dot("toe", 7, -14,50),
+      ],
+
+      "the hop": [
+        dot("thigh-base", 10,-10,0),
+        dot("thigh-mid", 10,-8,11),
+        dot("thigh-end", 10,-6,22),
+        dot("knee", 7, 1,32),
+        dot("calf", 7, 6,38),
+        dot("ankle", 7, 12,47),
+        dot("heel", 7, 10,52),
+        dot("toe", 7, 8,59),
+      ]
+    }
+
+    function dot(name, size, left, top) {
+      return {
+        name: name,
+        size: size,
+        left: left,
+        top: top}}
+
+    var demoLeg = thoughtToLeg(frames)
 
     var animatableSingleton = bridge.defineSingleton(
-      "demoLeg",
-      function() {
+      "demoLeg",[
+      frames],
+      function(frames) {
         return {
           node: null,
+          frames: frames,
           rotation: 0,
-          position: "the claw"}})
+          position: null}})
 
     bridge.domReady([
       bridgeModule(
@@ -58,6 +113,9 @@ library.using(
       function(thoughtToLeg, animatable, elementId) {
         animatable.node = document.getElementById(
           elementId)
+        if (!animatable.position) {
+          animatable.position = Object.keys(animatable.frames)[0]
+        }
         thoughtToLeg.animateNode(
           animatable)})
 

@@ -3,9 +3,8 @@ var library = require("module-library")(require)
 
 module.exports = library.export(
   "someone-is-a-person/brain",[
-  "web-element",
-  "./thought-to-leg"],
-  function(element, thoughtToLeg) {
+  "web-element"],
+  function(element) {
 
     var FRAME_LENGTH_IN_MS = 500
 
@@ -101,13 +100,6 @@ module.exports = library.export(
         "background": "#eee",
       }),
       function(height, slide, thought) {
-
-
-        var leg = thoughtToLeg(thought)
-
-        if (leg) {
-          this.addChild(leg)}
-
         this.appendStyles({
           "left": slide*2+"em",
           "top": height*2+"em",
