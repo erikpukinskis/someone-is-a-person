@@ -93,9 +93,15 @@ library.using(
 
     var demoLeg = animatedDots(frames)
 
+    var frameSingleton = bridge.defineSingleton(
+      "legFrames",[
+      frames],
+      function(frames) {
+        return frames })
+
     var animatableSingleton = bridge.defineSingleton(
       "demoLeg",[
-      frames],
+      frameSingleton],
       function(frames) {
         return {
           node: null,
