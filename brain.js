@@ -18,7 +18,11 @@ module.exports = library.export(
 
 
     backlog.done(
-      "Draw 4 frames of walk")
+      "Draw 4 frames of walk",
+      "draw leftwards legs",
+      "code leftward legs as squares",
+      "squash leftward legs frontward",
+      "any rotation")
 
     // I am smoking so much and it does very little
 
@@ -32,11 +36,6 @@ module.exports = library.export(
 
     backlog("brain",[
       "voxel moves forward twice as often",
-      "draw leftwards legs",
-      "code leftward legs as squares",
-
-      "squash leftward legs frontward",
-      "any rotation",
 
       "walk cycle will stretch to other nearby squares if you click them",
       // slider for how tight the knee gets
@@ -286,8 +285,6 @@ module.exports = library.export(
     brain.prepareBridge = function(bridge){
       if (bridge.remember("someone-is-a-person/brain")) {
         return }
-
-      thoughtToLeg.prepareBridge(bridge)
 
       bridge.addToHead(stylesheet)
 

@@ -101,7 +101,6 @@ module.exports = library.export(
     }
 
     function animateLeg(legElementId) {
-      console.log("animating")
       var node = document.getElementById(legElementId)
 
       setInterval(nextLegPosition.bind(null, node), 250)
@@ -123,11 +122,11 @@ module.exports = library.export(
       var newLeg = legs[position]
 
       var radians = rotation/180.0 * Math.PI
-      console.log("rotation", rotation)
 
-      newLeg.forEach(
+      var isFacingAway = Math.sin(rotation/180*Math.PI) < 0
+
+      var results = newLeg.map(
         function(dot) {
-
           var legPart = legNode.querySelector(
             ".dot-"+dot.name)
 
@@ -140,17 +139,34 @@ module.exports = library.export(
             var negative = false
           }
 
-          var newMidDotX = midDotX
           var newMidDotX = Math.cos(radians) * midDotX
+          var z = Math.sin(radians) * midDotX
 
           if (negative) {
             newMidDotX *= -1
           }
 
-          var left = newMidDotX - dot.size/2
+          return {
+            node: legPart,
+            z: z,
+            left: newMidDotX - dot.size/2,
+            top: dot.top
+          }
+        })
 
-          legPart.style.left = left+"px"
-          legPart.style.top = dot.top+"px" })
+      results.sort(function(a, b) {
+        return a.z - b.z
+      })
+
+      if (!isFacingAway) {
+        results = results.reverse()
+      }
+
+      results.forEach(function(result, i) {
+        result.node.style["z-index"] = i
+        result.node.style["left"] = result.left+"px"
+        result.node.style["top"] = result.top+"px"
+      })
     }
 
     function rotateLeg(legElementId) {
