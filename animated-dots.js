@@ -1,7 +1,7 @@
 var library = require("module-library")(require)
 
 module.exports = library.export(
-  "thought-to-leg",[
+  "animated-dot",[
   "web-element"],
   function(element) {
 
@@ -18,7 +18,7 @@ module.exports = library.export(
         "position": "relative"}),
       ])
 
-    function thoughtToLeg(frames) {
+    function animatedDots(frames) {
       var position = Object.keys(frames)[0]
       var dots = frames[position]
 
@@ -67,7 +67,6 @@ module.exports = library.export(
         animatable.frames)
 
       var dots = animatable.frames[animatable.position]
-      debugger
 
       setLegPosition(animatable.node, animatable.rotation, dots)  
     }
@@ -120,9 +119,9 @@ module.exports = library.export(
       })
     }
 
-    thoughtToLeg.animateNode = animateNode
+    animatedDots.animateNode = animateNode
 
-    thoughtToLeg.prepareBridge = prepareBridge
+    animatedDots.prepareBridge = prepareBridge
 
-    return thoughtToLeg
+    return animatedDots
   })

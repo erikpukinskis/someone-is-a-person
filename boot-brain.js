@@ -1,8 +1,8 @@
 var library = require("module-library")(require)
 
 library.using(
-  [library.ref(), "web-site", "web-element", "./brain", "browser-bridge", "bridge-module", "./thought-to-leg"],
-  function(lib, WebSite, element, brain, BrowserBridge, bridgeModule, thoughtToLeg) {
+  [library.ref(), "web-site", "web-element", "./brain", "browser-bridge", "bridge-module", "./animated-dots"],
+  function(lib, WebSite, element, brain, BrowserBridge, bridgeModule, animatedDots) {
 
     var site = new WebSite()
     var bridge = new BrowserBridge()
@@ -91,7 +91,7 @@ library.using(
         left: left,
         top: top}}
 
-    var demoLeg = thoughtToLeg(frames)
+    var demoLeg = animatedDots(frames)
 
     var animatableSingleton = bridge.defineSingleton(
       "demoLeg",[
@@ -106,17 +106,17 @@ library.using(
     bridge.domReady([
       bridgeModule(
         lib,
-        "./thought-to-leg",
+        "./animated-dots",
         bridge),
       animatableSingleton,
       demoLeg.assignId()],
-      function(thoughtToLeg, animatable, elementId) {
+      function(animatedDots, animatable, elementId) {
         animatable.node = document.getElementById(
           elementId)
         if (!animatable.position) {
           animatable.position = Object.keys(animatable.frames)[0]
         }
-        thoughtToLeg.animateNode(
+        animatedDots.animateNode(
           animatable)})
 
     page.addChild(demoLeg)
@@ -157,7 +157,7 @@ library.using(
 
     page.addChild(clock)
 
-    thoughtToLeg.prepareBridge(bridge)
+    animatedDots.prepareBridge(bridge)
 
     site.addRoute(
       "get",
