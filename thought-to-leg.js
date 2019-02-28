@@ -100,30 +100,28 @@ module.exports = library.export(
         els)
     }
 
-    function animateLeg(legElementId) {
-      var node = document.getElementById(legElementId)
-
-      setInterval(nextLegPosition.bind(null, node), 250)
+    function animateNode(animatable) {
+      setInterval(
+        tickAnimation.bind(null, animatable),
+        250)
     }
 
-    var position = "the claw"
-    var rotation = 0
+    function tickAnimation(animatable) {
+      animatable.position = nextPositionAfter[animatable.position]    
+      setLegPosition(animatable.node, animatable.rotation, animatable.position)  
+    }
+
     var nextPositionAfter = {
       "the claw": "the reach",
       "the reach": "the stand",
       "the stand": "the hop",
       "the hop" : "the claw"}
 
-    function nextLegPosition(legNode) {
-      position = nextPositionAfter[position]
-      setLegPosition(legNode)}
-
-    function setLegPosition(legNode) {
+    function setLegPosition(legNode, rotation, position) {
       var newLeg = legs[position]
 
       var radians = rotation/180.0 * Math.PI
-
-      var isFacingAway = Math.sin(rotation/180*Math.PI) < 0
+      var isFacingAway = Math.sin(radians) < 0
 
       var results = newLeg.map(
         function(dot) {
@@ -169,14 +167,7 @@ module.exports = library.export(
       })
     }
 
-    function rotateLeg(legElementId) {
-      rotation++
-      var node = document.getElementById(legElementId)
-      setLegPosition(node)}
-
-    thoughtToLeg.animateLeg = animateLeg
-
-    thoughtToLeg.rotateLeg = rotateLeg
+    thoughtToLeg.animateNode = animateNode
 
     thoughtToLeg.prepareBridge = prepareBridge
 

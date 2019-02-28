@@ -40,14 +40,37 @@ library.using(
 
     var demoLeg = thoughtToLeg("stance")
 
+    var animatableSingleton = bridge.defineSingleton(
+      "demoLeg",
+      function() {
+        return {
+          node: null,
+          rotation: 0,
+          position: "the claw"}})
+
     bridge.domReady([
-      bridgeModule(lib, "./thought-to-leg", bridge),
+      bridgeModule(
+        lib,
+        "./thought-to-leg",
+        bridge),
+      animatableSingleton,
       demoLeg.assignId()],
-      function(thoughtToLeg, legElementId) {
-        thoughtToLeg.animateLeg(legElementId)
-      })
+      function(thoughtToLeg, animatable, elementId) {
+        animatable.node = document.getElementById(
+          elementId)
+        thoughtToLeg.animateNode(
+          animatable)})
 
     page.addChild(demoLeg)
+
+    var rotateLeg = bridge.defineFunction([
+      animatableSingleton],
+      function(animatable) {
+        animatable.rotation++ })
+
+    var body = element("body",{
+      onkeydown: rotateLeg.evalable()},
+      page)
 
     for(var height=0; height<brainCells.length; height++) {
 
@@ -77,17 +100,6 @@ library.using(
     page.addChild(clock)
 
     thoughtToLeg.prepareBridge(bridge)
-
-    var rotateLeg = bridgeModule(
-      lib,
-      "thought-to-leg",
-      bridge)
-    .methodCall("rotateLeg")
-    .withArgs(demoLeg.id)
-
-    var body = element("body",{
-      onkeydown: rotateLeg.evalable()},
-      page)
 
     site.addRoute(
       "get",

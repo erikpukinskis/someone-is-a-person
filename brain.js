@@ -35,7 +35,7 @@ module.exports = library.export(
     // But in lieu of cannabis, I have decided to solve programming problems:
 
     backlog("brain",[
-      "voxel moves forward twice as often",
+      "voxel moves forward twice or 4x as often?",
 
       "walk cycle will stretch to other nearby squares if you click them",
       // slider for how tight the knee gets
@@ -256,7 +256,7 @@ module.exports = library.export(
       t++
       clock.innerHTML = t.toString()
 
-      if ((t-1) % 8 == 1) {
+      if ((t-1) % 2 == 1) {
         var background = document.querySelector(".background")
         background.style.transform = "translateY("+y+"em)"
       } 
