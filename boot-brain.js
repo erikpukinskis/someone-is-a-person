@@ -10,12 +10,13 @@ library.using(
 
     var FRAME_LENGTH_IN_MS = brain.FRAME_LENGTH_IN_MS
 
+
+    // Brain
+
     bridge.domReady([
       bridgeModule(lib, "./brain", bridge)],
       function(startBrain) {
         startBrain() })
-
-    // Brain
 
     var brainCells = [
       [null,"hips",null,null],
@@ -35,20 +36,23 @@ library.using(
 
     brain.prepareBridge(bridge)
 
-    var background = element(".background")
-    var bod = element(".bod.gravity")
 
-    var frames = {
-      "the claw": [
-        dot("thigh-base", 10,-11,0),
-        dot("thigh-mid", 10,-22,0),
-        dot("thigh-end", 10,-33,0),
-        dot("knee", 7,-35, 13),
-        dot("calf", 7,-26, 13),
-        dot("ankle", 7,-17, 13),
-        dot("heel", 7,-14, 15),
-        dot("toe", 7,-14, 22),
-      ],
+
+
+    // I hope I never stop copy/pasting these type of thing around EZJS
+
+    function dot(name, size, left, top) {
+      return {
+        name: name,
+        size: size,
+        left: left,
+        top: top}}
+
+
+
+    // Legs
+
+    var legFrames = {
 
       "the reach": [
         dot("thigh-base", 10,-10,0),
@@ -81,60 +85,70 @@ library.using(
         dot("ankle", 7, 12,47),
         dot("heel", 7, 10,52),
         dot("toe", 7, 8,59),
-      ]
+      ],
+
+      "the claw": [
+        dot("thigh-base", 10,-11,0),
+        dot("thigh-mid", 10,-22,0),
+        dot("thigh-end", 10,-33,0),
+        dot("knee", 7,-35, 13),
+        dot("calf", 7,-26, 13),
+        dot("ankle", 7,-17, 13),
+        dot("heel", 7,-14, 15),
+        dot("toe", 7,-14, 22),
+      ],        
     }
 
-    function dot(name, size, left, top) {
-      return {
-        name: name,
-        size: size,
-        left: left,
-        top: top}}
+    // This is a sign you are doing too much with the bridge and should do this in a module:
 
-    var demoLeg = animatedDots(frames)
+    function buildAnimationForBrowser(bridge, frames) {
 
-    var frameSingleton = bridge.defineSingleton(
-      "legFrames",[
-      frames],
-      function(frames) {
-        return frames })
+      var frameSingleton = bridge.defineSingleton(
+        "legFrames",[
+        frames],
+        function(frames) {
+          return frames })
 
-    var animatableSingleton = bridge.defineSingleton(
-      "demoLeg",[
-      frameSingleton],
-      function(frames) {
-        return {
-          node: null,
-          frames: frames,
-          rotation: 0,
-          position: null}})
+      var animatableSingleton = bridge.defineSingleton(
+        "animatable",[
+        frameSingleton],
+        function(frames) {
+          return {
+            node: null,
+            frames: frames,
+            rotation: 0,
+            position: null}})
 
-    bridge.domReady([
-      bridgeModule(
-        lib,
-        "./animated-dots",
-        bridge),
-      animatableSingleton,
-      demoLeg.assignId()],
-      function(animatedDots, animatable, elementId) {
-        animatable.node = document.getElementById(
-          elementId)
-        if (!animatable.position) {
-          animatable.position = Object.keys(animatable.frames)[0]
-        }
-        animatedDots.animateNode(
-          animatable)})
+      bridge.addBodyEvent(
+        "onkeydown",
+        bridgeModule(
+          lib,
+          "animated-dots",
+          bridge)
+        .methodCall("rotate")
+        .withArgs(
+          animatableSingleton)
+        .evalable())
 
-    page.addChild(demoLeg)
+      var el = animatedDots(frames)
 
-    var rotateLeg = bridge.defineFunction([
-      animatableSingleton],
-      function(animatable) {
-        animatable.rotation++ })
+      var startAnimation =
+      bridge.domReady(
+        bridgeModule(
+          lib,
+          "animated-dots",
+          bridge)
+        .withArgs(animatableSingleton, el.assignId()))
 
-    var body = element("body",{
-      onkeydown: rotateLeg.evalable()},
-      page)
+      bridge.send(
+        el)}
+
+
+
+    // Movers
+
+    var background = element(".background")
+    var bod = element(".bod.gravity")
 
     for(var height=0; height<brainCells.length; height++) {
 
@@ -151,13 +165,21 @@ library.using(
           background.addChild(neuron)
         }
       }
+
+
     }
+
+
+    var animation = bridge.partial()
+    buildAnimationForBrowser(animation, legFrames)
+    var firstMover = element(
+      ".mover.gravity",
+      bod)
 
     page.addChildren(
       background,
-      element(
-        ".mover.gravity",
-        bod))
+      firstMover,
+      animation)
 
     var clock = element(".clock", "0", element.style({"font-family": "sans-serif"}))
 
@@ -168,7 +190,7 @@ library.using(
     site.addRoute(
       "get",
       "/",
-      bridge.requestHandler(body)
+      bridge.requestHandler(page)
     )
 
   }

@@ -6,7 +6,7 @@
   "dependencies": {
     "add-dashes": "*",
     "basic-styles": "*",
-    "bridge-module": "^0.39.0",
+    "bridge-module": "^0.40.0",
     "browser-bridge": "*",
     "creature": "*",
     "html-painting": "*",

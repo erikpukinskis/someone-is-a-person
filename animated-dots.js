@@ -1,9 +1,10 @@
 var library = require("module-library")(require)
 
 module.exports = library.export(
-  "animated-dot",[
+  "animated-dots",[
+  library.ref(),
   "web-element"],
-  function(element) {
+  function(lib, element) {
 
     function prepareBridge(bridge) {
       bridge.addToHead(stylesheet)
@@ -44,6 +45,16 @@ module.exports = library.export(
         ".leg",
         els)
     }
+
+    function startAnimation(animatedDots, animatable, elementId) {
+      animatable.node = document.getElementById(
+        elementId)
+      if (!animatable.position) {
+        animatable.position = Object.keys(animatable.frames)[0]
+      }
+      animatedDots.animateNode(
+        animatable)}
+
 
     function animateNode(animatable) {
       setInterval(
@@ -119,9 +130,16 @@ module.exports = library.export(
       })
     }
 
+    function rotate(animatable) {
+      animatable.rotation++ }
+
+    animatedDots.startAnimation = startAnimation
+
     animatedDots.animateNode = animateNode
 
     animatedDots.prepareBridge = prepareBridge
+
+    animatedDots.rotate = rotate
 
     return animatedDots
   })
