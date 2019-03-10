@@ -45,12 +45,18 @@ module.exports = library.export(
         els)
     }
 
-    function startAnimation(animatable, elementId) {
-      animatable.node = document.getElementById(
+    function startAnimation(frames, elementId) {
+      var firstFrame = Object.keys(frames)[0]
+
+      var node = document.getElementById(
         elementId)
-      if (!animatable.position) {
-        animatable.position = Object.keys(animatable.frames)[0]
-      }
+      
+      var animatable = {
+        node: node,
+        frames: frames,
+        rotation: 0,
+        position: firstFrame }
+
       animatedDots.animateNode(
         animatable)}
 

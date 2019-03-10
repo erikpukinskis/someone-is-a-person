@@ -20,7 +20,7 @@ library.using(
 
     var brainCells = [
       [null,"hips",null,null],
-      ["stance",null,"stance",null],
+      ["stance-left",null,"stance-right",null],
     ]
 
     var highs = brainCells[0]
@@ -99,53 +99,57 @@ library.using(
       ],        
     }
 
-    // This is a sign you are doing too much with the bridge and should do this in a module:
-
-    function buildAnimationForBrowser(bridge, frameSingleton, el) {
-
-      var animatableSingleton = bridge.defineSingleton(
-        "animatable",[
-        frameSingleton],
-        function(frames) {
-          return {
-            node: null,
-            frames: frames,
-            rotation: 0,
-            position: null}})
-
-      bridge.addBodyEvent(
-        "onkeydown",
-        bridgeModule(
-          lib,
-          "animated-dots",
-          bridge)
-        .methodCall("rotate")
-        .withArgs(
-          animatableSingleton)
-        .evalable())
-
-      bridge.domReady(
-        bridgeModule(
-          lib,
-          "animated-dots",
-          bridge)
-        .methodCall("startAnimation")
-        .withArgs(animatableSingleton, el.assignId()))
-      }
-
-
 
     // Movers
 
     var background = element(".background")
+
     var bod = element(".bod.gravity")
+
+    var framesSingleton = bridge.defineSingleton(
+      "legFrames",[
+      legFrames],
+      function(frames) {
+        return frames })
+
+    var leftLeg = animatedDots(legFrames)
+
+    var rightLeg = animatedDots(legFrames)
+
+    var startInBrowser = bridgeModule(
+      lib,
+      "animated-dots",
+      bridge)
+    .methodCall(
+      "startAnimation")
+
+    bridge.domReady(
+      startInBrowser.withArgs(
+        framesSingleton,
+        leftLeg.assignId()))
+
+    bridge.domReady(
+      startInBrowser.withArgs(
+        framesSingleton,
+        rightLeg.assignId()))
 
     for(var height=0; height<brainCells.length; height++) {
 
       for(var slide=0; slide<brainCells[0].length; slide++) {
         var thought = brainCells[height][slide]
+
+        if (thought) {
+          var parts = thought.split("-")
+          thought = parts[0]
+          var side = parts[1]
+        }
+
         var neuron = brain.cell(height, slide, thought)
 
+        if (thought == "stance") {
+          var leg = side == "left" ? leftLeg : rightLeg
+          neuron.addChild(leg)
+        }
         if (thought == "stance" || thought == "hips") {
           // if (height == 1) {
           //   neuron.appendStyles({visibility: "hidden"})
@@ -159,25 +163,13 @@ library.using(
 
     }
 
-
-    var framesSingleton = bridge.defineSingleton(
-      "legFrames",[
-      legFrames],
-      function(frames) {
-        return frames })
-
-    var el = animatedDots(legFrames)
-
-    buildAnimationForBrowser(bridge, framesSingleton, el)
-
     var firstMover = element(
       ".mover.gravity",
       bod)
 
     page.addChildren(
       background,
-      firstMover,
-      el)
+      firstMover)
 
     var clock = element(".clock", "0", element.style({"font-family": "sans-serif"}))
 
