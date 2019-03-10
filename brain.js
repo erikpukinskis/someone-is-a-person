@@ -34,6 +34,8 @@ module.exports = library.export(
     // But in lieu of cannabis, I have decided to solve programming problems:
 
     backlog("brain",[
+      "legs are in the squares",
+      
       "voxel moves forward twice or 4x as often?",
 
       "walk cycle will stretch to other nearby squares if you click them",

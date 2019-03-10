@@ -132,12 +132,12 @@ library.using(
 
       var el = animatedDots(frames)
 
-      var startAnimation =
       bridge.domReady(
         bridgeModule(
           lib,
           "animated-dots",
           bridge)
+        .methodCall("startAnimation")
         .withArgs(animatableSingleton, el.assignId()))
 
       bridge.send(

@@ -7,7 +7,7 @@
     "add-dashes": "*",
     "basic-styles": "*",
     "bridge-module": "^0.40.0",
-    "browser-bridge": "*",
+    "browser-bridge": "^0.174.0",
     "creature": "*",
     "html-painting": "*",
     "identifiable": "*",

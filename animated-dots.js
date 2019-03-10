@@ -2,9 +2,8 @@ var library = require("module-library")(require)
 
 module.exports = library.export(
   "animated-dots",[
-  library.ref(),
   "web-element"],
-  function(lib, element) {
+  function(element) {
 
     function prepareBridge(bridge) {
       bridge.addToHead(stylesheet)
@@ -46,7 +45,7 @@ module.exports = library.export(
         els)
     }
 
-    function startAnimation(animatedDots, animatable, elementId) {
+    function startAnimation(animatable, elementId) {
       animatable.node = document.getElementById(
         elementId)
       if (!animatable.position) {
