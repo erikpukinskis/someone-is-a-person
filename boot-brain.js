@@ -101,13 +101,7 @@ library.using(
 
     // This is a sign you are doing too much with the bridge and should do this in a module:
 
-    function buildAnimationForBrowser(bridge, frames) {
-
-      var frameSingleton = bridge.defineSingleton(
-        "legFrames",[
-        frames],
-        function(frames) {
-          return frames })
+    function buildAnimationForBrowser(bridge, frameSingleton, el) {
 
       var animatableSingleton = bridge.defineSingleton(
         "animatable",[
@@ -130,8 +124,6 @@ library.using(
           animatableSingleton)
         .evalable())
 
-      var el = animatedDots(frames)
-
       bridge.domReady(
         bridgeModule(
           lib,
@@ -139,9 +131,7 @@ library.using(
           bridge)
         .methodCall("startAnimation")
         .withArgs(animatableSingleton, el.assignId()))
-
-      bridge.send(
-        el)}
+      }
 
 
 
@@ -170,8 +160,16 @@ library.using(
     }
 
 
-    var animation = bridge.partial()
-    buildAnimationForBrowser(animation, legFrames)
+    var framesSingleton = bridge.defineSingleton(
+      "legFrames",[
+      legFrames],
+      function(frames) {
+        return frames })
+
+    var el = animatedDots(legFrames)
+
+    buildAnimationForBrowser(bridge, framesSingleton, el)
+
     var firstMover = element(
       ".mover.gravity",
       bod)
@@ -179,7 +177,7 @@ library.using(
     page.addChildren(
       background,
       firstMover,
-      animation)
+      el)
 
     var clock = element(".clock", "0", element.style({"font-family": "sans-serif"}))
 
