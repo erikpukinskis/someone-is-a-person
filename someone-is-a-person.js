@@ -136,7 +136,7 @@ module.exports = library.export(
           var temporaryIdentity = request.cookies.temporaryIdentity
           var redirectTo = redirects[temporaryIdentity]
 
-          if (!name) {
+          if (!myName) {
             throw new Error("no name")
           }
           if (!response) {
