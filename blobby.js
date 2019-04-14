@@ -5,9 +5,10 @@ module.exports = library.export(
   "web-element"],
   function(element) {
 
-    function blobby(bridge) {
+    function blobby(someoneId) {
+
       var bod = element(
-        ".breathing.blobby")
+        ".breathing.blobby", someoneId)
 
       var creatureOffset = element.style({
         "transform": "translate(100px, 100px)"})
