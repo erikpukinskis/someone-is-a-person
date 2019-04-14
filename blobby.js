@@ -2,35 +2,49 @@ var library = require("module-library")(require)
 
 module.exports = library.export(
   "blobby",[
-  "web-element"],
-  function(element) {
+  library.ref(),
+  "web-element",
+  "bridge-module",
+  "./blobs.js"],
+  function(lib, element, bridgeModule, blobs) {
 
-    function blobby(someoneId) {
-
-      var bod = element(
-        ".breathing.blobby", someoneId)
+    function blobby(bridge, someoneId) {
 
       var creatureOffset = element.style({
         "transform": "translate(100px, 100px)"})
 
       var thumbprint = element(
-        ".creature",
+        ".blobby",
         creatureOffset,
         element(
-          ".creature-body",
-          bod))
+          ".breathing.blobby-body",
+          someoneId))
 
       var name = element(
-        ".name",
+        ".blobby-name",
         zs(),
         creatureOffset,
         "Erik")
 
-      var blob = [
+      var el = element(
+        ".blobby-container",
         thumbprint,
-        name]
+        name)
 
-      return blob}
+      var blob = blobs()
+
+      bridge.domReady(
+        bridgeModule(
+          lib,
+          "someone-is-a-person/blobs",
+          bridge)
+        .methodCall(
+          "focusOnBlob")
+        .withArgs(
+          blob,
+          el.assignId()))
+
+      return el}
 
     var zs = element.template(
       ".zs",
@@ -208,7 +222,7 @@ module.exports = library.export(
         }),
 
       element.style(
-        ".blobby",{
+        ".blobby-body",{
         "background": "lightgreen",
         "transition": "background 0.5s",
         "opacity": "0.7",
@@ -217,121 +231,34 @@ module.exports = library.export(
         "border-radius": "0.75cm"}),
 
       element.style(
-        ".bobbing .blobby, .walking .blobby",{
+        ".blobby-body.bobbing , .blobby-body.walking",{
           "background": "#fdcf27"}),
 
       element.style(
-        ".name",{
-          "width": "1.4cm",
-          "text-align": "center",
-          "line-height": "1cm",
-          "color": "black",
-          "font-weight": "bold"}),      
+        ".blobby-name",{
+        "width": "1.4cm",
+        "text-align": "center",
+        "line-height": "1cm",
+        "color": "black",
+        "font-weight": "bold"}),      
       ])
 
-    function prepareBridge(bridge) {
+    function prepareBridge(bridge, roomOnBrowser) {
       if (bridge.remember("blobby")) {
         return }
 
       bridge.addToHead(stylesheet)
 
-      var awakeCall = bridge.defineFunction(
-        toggleAwake)
-
-      var moveCall = bridge.defineFunction([awakeCall],
-        moveToHere)
-
-      var creature = bridge.defineSingleton(
-        buildCreature)
+      var blobsOnBrowser = bridgeModule(
+        lib,
+        "someone-is-a-person/blobs",
+        bridge)
 
       bridge.addBodyEvent(
         "onclick",
-        moveCall.withArgs(creature, bridge.event).evalable())
+        blobsOnBrowser.methodCall("moveToHere").withArgs(roomOnBrowser, bridge.event).evalable())
 
       bridge.see("blobby", true)
-    }
-
-    function moveToHere(toggleAwake, creature, event) {
-      var x = event.clientX
-      var y = event.clientY
-      var dx = creature.x - x
-      var dy = creature.y - y
-      dx = Math.round(dx / 100)*100
-      dy = Math.round(dy / 100)*100
-
-      if (dx == 0 && dy == 0) {
-        toggleAwake(creature)
-        return
-      }
-
-      creature.x = x
-      creature.y = y
-
-      var distance = Math.sqrt(dx*dx + dy*dy)
-
-      var time = distance/200
-
-      creature.load()
-
-      creature.bodyEl.classList.remove("bobbing")
-      creature.bodyEl.classList.add("walking")
-      creature.nameEl.classList.add("awake")
-
-      creature.nameEl.style["transition"] = "opacity 0.2s"
-      creature.nameEl.style["opacity"] = "0"
-
-      if (creature.timeout) {
-        clearTimeout(creature.timeout)}
-
-      var ms = Math.ceil(time*1000)
-
-      var transform = "translateX("+(x-20)+"px) translateY("+(y-20)+"px)"
-
-      creature.timeout = setTimeout(
-        function() {
-          creature.bodyEl.classList.remove("walking")
-          creature.bodyEl.classList.add("bobbing")
-          creature.nameEl.style.transform = transform
-          creature.nameEl.style["transition"] = "opacity 2s"
-          creature.nameEl.style["opacity"] = "1"
-        }, ms)
-
-
-      creature.el.style["transition"] = "transform "+time+"s cubic-bezier(0.19, 0, 0.58, 1)"
-      creature.el.style.transform = transform
-    }
-
-    function toggleAwake(creature) {
-      creature.load()
-      if (creature.isAwake) {
-        creature.bodyEl.classList.remove("bobbing")
-        creature.nameEl.classList.remove("awake")
-        creature.isAwake = false
-      } else {
-        creature.bodyEl.classList.add("bobbing")
-        creature.nameEl.classList.add("awake")
-        creature.isAwake = true
-      }
-    }
-
-    function buildCreature() {
-      var me = {
-        isAwake: true,
-        x: 100,
-        y: 100}
-
-      function load() {
-        if (this.el) {
-          return }
-        this.el = document.querySelector(
-          ".creature")
-        this.bodyEl = this.el.querySelector(
-          ".creature-body")
-        this.nameEl = document.querySelector(".name")}
-
-      me.load = load.bind(me)
-
-      return me
     }
 
     blobby.prepareBridge = prepareBridge

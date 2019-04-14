@@ -2,7 +2,7 @@ var library = require("module-library")(require)
 
 module.exports = library.export(
   "someone-is-a-person",
-  [library.ref(), "phone-person", "./id-card", "identifiable", "html-painting", "creature", "tell-the-universe", "web-element", "bridge-module", "web-site"],
+  [library.ref(), "phone-person", "./id-card", "identifiable", "html-painting", "creature", "a-wild-universe-appeared", "web-element", "bridge-module", "web-site"],
   function(lib, phonePerson, idCard, identifiable, htmlPainting, creature, aWildUniverseAppeared, element, bridgeModule, WebSite) {
 
     var redirects = {}
