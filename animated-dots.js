@@ -5,6 +5,8 @@ module.exports = library.export(
   "web-element"],
   function(element) {
 
+    var FRAME_LENGTH_IN_MS = 5000
+
     function prepareBridge(bridge) {
       bridge.addToHead(stylesheet)
     }
@@ -50,7 +52,7 @@ module.exports = library.export(
 
       var node = document.getElementById(
         elementId)
-      
+
       var animatable = {
         node: node,
         frames: frames,
@@ -64,7 +66,7 @@ module.exports = library.export(
     function animateNode(animatable) {
       setInterval(
         tickAnimation.bind(null, animatable),
-        250)
+        FRAME_LENGTH_IN_MS)
     }
 
     function nextKey(currentKey, object) {
@@ -145,6 +147,8 @@ module.exports = library.export(
     animatedDots.prepareBridge = prepareBridge
 
     animatedDots.rotate = rotate
+
+    animatedDots.FRAME_LENGTH_IN_MS = FRAME_LENGTH_IN_MS
 
     return animatedDots
   })

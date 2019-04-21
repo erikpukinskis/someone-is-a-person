@@ -42,7 +42,8 @@ module.exports = library.export(
           "focusOnBlob")
         .withArgs(
           blob,
-          el.assignId()))
+          el.assignId(),
+          someoneId))
 
       return el}
 

@@ -3,14 +3,9 @@ var library = require("module-library")(require)
 
 module.exports = library.export(
   "someone-is-a-person/brain",[
-  "web-element"],
-  function(element) {
-
-    var FRAME_LENGTH_IN_MS = 500
-
-
-
-
+  "web-element",
+  "./animated-dots"],
+  function(element, animatedDots) {
 
     function backlog() {}
     backlog.done = function(){}
@@ -35,7 +30,7 @@ module.exports = library.export(
 
     backlog("brain",[
       "legs are in the squares",
-      
+
       "voxel moves forward twice or 4x as often?",
 
       "walk cycle will stretch to other nearby squares if you click them",
@@ -144,11 +139,11 @@ module.exports = library.export(
 
       element.style(".cell.power", {
         "background": "black",
-        "transition": "height "+FRAME_LENGTH_IN_MS+"ms"
+        "transition": "height "+animatedDots.FRAME_LENGTH_IN_MS+"ms"
       }),
 
       element.style(".gravity", {
-        "transition": "transform "+FRAME_LENGTH_IN_MS+"ms",
+        "transition": "transform "+animatedDots.FRAME_LENGTH_IN_MS+"ms",
         "transition-timing-function": "ease-in", // http://stackoverflow.com/a/15427614/778946
       }),
 
@@ -191,7 +186,7 @@ module.exports = library.export(
           right: cellNode(1,2),
         }
         
-        setInterval(tick, FRAME_LENGTH_IN_MS)
+        setInterval(tick, animatedDots.FRAME_LENGTH_IN_MS)
       })
 
     }
@@ -273,8 +268,6 @@ module.exports = library.export(
       break;
       }
     }
-
-    brain.FRAME_LENGTH_IN_MS = FRAME_LENGTH_IN_MS
 
     brain.prepareBridge = function(bridge){
       if (bridge.remember("someone-is-a-person/brain")) {

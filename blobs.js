@@ -6,17 +6,17 @@ module.exports = library.export(
 
     var focus
     var el
+    var meId
 
-    function focusOnBlob(blob, elementId) {
+    function focusOnBlob(blob, elementId, creatureId) {
       focus = blob
+      meId = creatureId
       el = document.getElementById(elementId)
     }
 
     function moveToHere(universe, event) {
 
       var blob = focus
-
-      console.log("here is where we sync to a universe hopefully", universe)
 
       var x = event.clientX
       var y = event.clientY
@@ -29,6 +29,10 @@ module.exports = library.export(
         toggleAwake(blob)
         return
       }
+
+      console.log("we are about to do a do, which should trigger a websocket.send somehow...")
+      debugger
+      universe.do("creature.moveTo", meId, x, y)
 
       blob.x = x
       blob.y = y

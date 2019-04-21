@@ -8,9 +8,6 @@ library.using(
     var bridge = new BrowserBridge()
     site.start(5550)
 
-    var FRAME_LENGTH_IN_MS = brain.FRAME_LENGTH_IN_MS
-
-
     // Brain
 
     bridge.domReady([
@@ -52,6 +49,16 @@ library.using(
 
     // Legs
 
+    // launch:
+    // stand stand
+    // stand claw
+
+    // cycle
+    // stand reach
+    // claw hop
+    // reach stand
+    // hop claw
+
     var legFrames = {
 
       "the reach": [
@@ -65,17 +72,6 @@ library.using(
         dot("toe", 7, -55,36),
       ],
 
-      "the stand": [
-        dot("thigh-base", 10,-10,0),
-        dot("thigh-mid", 10,-10,11),
-        dot("thigh-end", 10,-10,22),
-        dot("knee", 7, -6,31),
-        dot("calf", 7, -6,39),
-        dot("ankle", 7, -6,47),
-        dot("heel", 7, -7,50),
-        dot("toe", 7, -14,50),
-      ],
-
       "the hop": [
         dot("thigh-base", 10,-10,0),
         dot("thigh-mid", 10,-8,11),
@@ -85,6 +81,17 @@ library.using(
         dot("ankle", 7, 12,47),
         dot("heel", 7, 10,52),
         dot("toe", 7, 8,59),
+      ],
+
+      "the stand": [
+        dot("thigh-base", 10,-10,0),
+        dot("thigh-mid", 10,-10,11),
+        dot("thigh-end", 10,-10,22),
+        dot("knee", 7, -6,31),
+        dot("calf", 7, -6,39),
+        dot("ankle", 7, -6,47),
+        dot("heel", 7, -7,50),
+        dot("toe", 7, -14,50),
       ],
 
       "the claw": [
