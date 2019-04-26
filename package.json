@@ -4,20 +4,20 @@
   "description": "Identify people by a phone number and text with them until everyone-is-free",
   "main": "someone-is-a-person.js",
   "dependencies": {
-    "a-wild-universe-appeared": "*",
+    "a-wild-universe-appeared": "^0.43.0",
     "add-dashes": "*",
     "basic-styles": "*",
-    "bridge-module": "^0.40.0",
-    "browser-bridge": "^0.178.0",
+    "bridge-module": "^0.47.0",
+    "browser-bridge": "^0.181.0",
     "creature": "^0.7.0",
     "html-painting": "*",
     "identifiable": "*",
     "is-everyone-free": "*",
-    "module-library": "*",
+    "module-library": "^0.94.0",
     "paint-on-picture": "*",
     "phone-person": "*",
     "web-element": "*",
-    "web-site": "*"
+    "web-site": "^0.50.0"
   },
   "devDependencies": {
     "express": "*"

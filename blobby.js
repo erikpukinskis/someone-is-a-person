@@ -222,6 +222,19 @@ module.exports = library.export(
           "transform": "translateY(-12px)"},
         }),
 
+      // If we want a highlight:
+
+      // element.style {
+      //     background: #d0ffd0;
+      //     width: 4px;
+      //     height: 4px;
+      //     position: absolute;
+      //     border-radius: 2px;
+      //     left: 15px;
+      //     top: 13px;
+      //     font-size: 24px;
+      // }
+
       element.style(
         ".blobby-body",{
         "background": "lightgreen",

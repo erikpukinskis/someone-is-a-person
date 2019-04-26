@@ -30,9 +30,11 @@ module.exports = library.export(
         return
       }
 
-      console.log("we are about to do a do, which should trigger a websocket.send somehow...")
+      console.log("// 1")
+      console.log("HEY! THIS is where we kick off the sync")
       debugger
       universe.do("creature.moveTo", meId, x, y)
+      universe.broadcast()
 
       blob.x = x
       blob.y = y

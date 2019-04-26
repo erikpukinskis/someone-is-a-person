@@ -41,37 +41,22 @@ library.using([
         var meId = creature()
         var themId = request.params.themId
 
-        sendRoom(bridge, meId, themId)})
+        sendRoom(bridge, themId, meId)})
 
       
-    function sendRoom(bridge, meId, themId) {
+    function sendRoom(bridge, meId, observerId) {
 
-      var roomInBrowser = bridge.defineSingleton([
-        bridgeModule(
-          lib,
-          "a-wild-universe-appeared",
-          bridge)],
-        function(aWildUniverseAppeared) {
-          return aWildUniverseAppeared(
-            "hi",{
-            "blobby": "blobby"})
-        })
+      var room = rooms[meId]
 
-      blobby.prepareBridge(
-        baseBridge,
-        roomInBrowser)
-
-      if (themId) {
-        var room = rooms[themId]
-        if (!room) {
-          throw new Error("No room for them: "+themId)
-        }
-      } else {
+      if (!room) {
+        console.log("setting up a room for the browser...")
         var room = aWildUniverseAppeared(
-          "room",{
+          "room-for-talking-to-"+meId,{
           "blobby": "blobby"})
 
         rooms[meId] = room
+      } else {
+        console.log("found a room for "+meId)
       }
 
       var aWildInBrowser = bridgeModule(
@@ -81,36 +66,66 @@ library.using([
 
       var universeInBrowser = room.defineOn(bridge, aWildInBrowser)
 
+      blobby.prepareBridge(
+        bridge,
+        universeInBrowser)
+
       var socket = new SingleUseSocket(site)
 
-      console.log("we are about to sync to the roomuniverse socket on the server. This ostensibly tells the universe that whatever comes out of that socket needs to get added to itself, and broadcasted to any other clients. It also means this client wants to get any updates onStatement of the universe.")
+      console.log("We are about to tell the room universe to sync to a newly created socket.\n")
       debugger
-      room.syncToSocket(socket)
+      room.syncToSocket(socket, andRebroadcast)
 
       var blobs = []
 
-      if (themId) {
-        bridge.domReady([
-          socket.defineListenOn(bridge),
-          socket.defineSendOn(bridge),
-          themId,
-          universeInBrowser],
-          function(listen, send, v, universe) {
-            console.log("we have a customerId to do something with:", customerId, "... maybe filter the universe log based on it?")
-            debugger
-            universe.syncToSocket(listen, send)
-          })
-  
-        var them = blobby(bridge, themId)
-        blobs.push(them)
-      }
+      bridge.domReady([
+        socket.defineListenOn(bridge),
+        socket.defineSendOn(bridge),
+        universeInBrowser],
+        function(listen, send, universe) {
+          console.log("Syncing universe to socket listen and send on client")
+          debugger
+          var fakeSocket = {
+            listen: listen,
+            send: send }
+          universe.syncToSocket(fakeSocket, andBackfillOnly)
 
+          function andBackfillOnly(senderId, universe, data) {
+            console.log("// 3")
+            debugger
+            data = JSON.parse(data)
+            var functionIdentifier = data.functionIdentifier
+            var args = data.args            
+            universe.do(functionIdentifier, args)
+          }
+        })
+  
       var blob = blobby(bridge, meId)
       blobs.push(blob)
 
+      if (observerId) {
+        var observer = blobby(bridge, observerId)
+        blobs.push(observer)
+      }
+
+      console.log("sending blobs to bridge!")
       bridge.send(blobs)
     }
 
+    function andRebroadcast (senderId, universe, data) {
+      console.log("// 2")
+      console.log("did get a message on the server. Should backfill and broadcast")
+      debugger
 
+      data = JSON.parse(data)
+      var functionIdentifier = data.functionIdentifier
+      var args = data.args
+
+      universe.do(functionIdentifier, args)
+      universe.broadcast()
+    }
+
+
+    // end of demo
   }
 )
